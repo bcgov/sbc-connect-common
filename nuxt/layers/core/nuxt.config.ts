@@ -14,7 +14,21 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
-  css: [join(currentDir, './app/assets/css/main.css')],
+  css: [
+    join(currentDir, './app/assets/css/main.css'),
+    '@/assets/css/layout.css'
+  ],
+
+  app: {
+    head: {
+      link: [
+        { rel: 'stylesheet', href: '/css/addresscomplete-2.50.min.css' }
+      ],
+      script: [
+        { src: '/js/addresscomplete-2.50.min.js', type: 'text/javascript', defer: true }
+      ]
+    }
+  },
 
   modules: [
     '@nuxt/ui',

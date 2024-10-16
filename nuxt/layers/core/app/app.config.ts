@@ -98,6 +98,9 @@ export default defineAppConfig({
         white: {
           header: 'text-white text-sm tracking-wide dark:text-white hover:bg-white/[0.1] dark:bg-gray-900 dark:hover:bg-gray-800/75 focus-visible:ring-2 focus-visible:ring-white dark:focus-visible:ring-white transition-colors duration-300 ease-in-out',
           solid: 'shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 text-gray-900 dark:text-white bg-white hover:bg-gray-50 disabled:bg-white dark:bg-gray-900 dark:hover:bg-gray-800/50 dark:disabled:bg-gray-900 focus-visible:ring-2 focus-visible:ring-primary-500 dark:focus-visible:ring-white'
+        },
+        red: {
+          outline: 'text-red-600 border border-red-600 hover:bg-red-100'
         }
       },
       variant: {
@@ -159,6 +162,9 @@ export default defineAppConfig({
     },
     input: {
       base: 'relative text-gray-900 border-0 border-b-[1px] border-gray-500 ring-0 focus:ring-0',
+      file: {
+        base: 'file:text-gray-700 file:pt-2'
+      },
       placeholder: 'placeholder-gray-700',
       rounded: 'rounded-none rounded-t', // rounded-t-md?
       size: {
@@ -174,7 +180,7 @@ export default defineAppConfig({
           outline: 'bg-primary-50 ring-0 border-primary-500 hover:bg-gray-200 focus:border-b-2 focus:ring-0'
         },
         red: {
-          outline: 'bg-gray-100 ring-0 border-red-600 hover:bg-gray-200 ' +
+          outline: 'bg-red-100 ring-0 border-red-600 placeholder-red-600 hover:bg-gray-200 ' +
             'focus:border-red-600 focus:border-b-2 focus:ring-0'
         }
       },
@@ -260,7 +266,7 @@ export default defineAppConfig({
           none: 'ring-0 border-primary-500 focus:border-b-2 focus:ring-0'
         },
         red: {
-          outline: 'ring-0 border-red-600 hover:bg-gray-200 ' +
+          outline: 'bg-red-100 border-red-600 ring-0 hover:bg-gray-200 ' +
             'focus:border-red-600 focus:border-b-2 focus:ring-0'
         }
       },
@@ -288,16 +294,21 @@ export default defineAppConfig({
       }
     },
     selectMenu: {
+      base: 'overflow-x-hidden',
+      input: 'bg-gray-100 text-gray-700 h-10 -mt-2 border-b-[1.5px] border-b-primary',
       label: 'text-gray-700',
       rounded: 'rounded-none',
       width: 'min-w-max',
       padding: 'p-0',
+      popper: { offsetDistance: '0', placement: 'bottom-start', locked: 'true' },
       ring: 'ring-0',
       option: {
+        container: 'w-full',
+        empty: 'text-gray-700',
         padding: 'px-3 py-2',
         rounded: 'rounded-none',
         active: 'text-primary-500',
-        selected: 'text-primary-500 bg-gray-100',
+        selected: 'text-primary-500 bg-gray-100 pe-0',
         icon: {
           active: 'text-primary-500'
         },
@@ -332,7 +343,7 @@ export default defineAppConfig({
     },
     tooltip: {
       wrapper: 'relative inline-flex max-h-min',
-      container: 'z-20 group min-h-fit opacity-90',
+      container: 'z-20 group min-h-fit opacity-100',
       background: 'bg-gray-700',
       color: 'text-white',
       ring: 'ring-0',
