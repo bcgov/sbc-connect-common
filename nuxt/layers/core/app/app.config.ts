@@ -334,11 +334,18 @@ export default defineAppConfig({
       }
     },
     textarea: {
-      base: 'bg-gray-100 hover:bg-gray-200 border-b-[1px] focus:border-b-2 h-20 focus:ring-0 text-gray-900',
+      base: 'bg-gray-100 hover:bg-gray-200 border-b text-gray-900 focus:border-b-2 h-20 hover:bg-gray-200',
       rounded: 'rounded-none rounded-t',
-      variant: {
-        bcGov: 'border-gray-700 placeholder-gray-700 focus:border-primary-500 focus:placeholder-primary-500',
-        error: 'border-red-500 focus:border-red-500 placeholder-red-500 focus:placeholder-red-500'
+      color: {
+        gray: {
+          outline: 'placeholder-gray-700 ring-0 focus:ring-0 focus:placeholder-primary-500'
+        },
+        primary: {
+          outline: 'bg-primary-50 border-primary-500 text-gray-900 ring-0 focus:ring-0'
+        },
+        red: {
+          outline: 'bg-red-50 border-red-600 placeholder-red-600 ring-0 focus:ring-0'
+        }
       }
     },
     tooltip: {
