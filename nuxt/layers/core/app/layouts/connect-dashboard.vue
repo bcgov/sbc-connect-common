@@ -3,6 +3,7 @@
     <ConnectHeader />
     <ConnectSystemBanner />
     <ConnectBreadcrumb />
+    <ConnectDetailsHeader />
     <main class="app-inner-container app-body">
       <slot />
     </main>

@@ -38,9 +38,9 @@ const links = [
   <footer
     id="connect-main-footer"
     data-testid="connect-main-footer"
-    class="border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer dark:border-t dark:bg-bcGovColor-darkGray"
+    class="py-4 border-t-2 border-bcGovColor-navDivider bg-bcGovColor-footer dark:border-t dark:bg-bcGovColor-darkGray"
   >
-    <div class="mx-auto flex max-w-bcGovLg items-center justify-between px-2 py-4">
+    <div class="app-inner-container flex items-center justify-between">
       <nav :aria-label="$t('ConnectFooter.navLabel')" class="flex grow">
         <ul class="list-none flex-col gap-1 p-0 sm:-ml-2 sm:flex-row sm:flex-wrap">
           <li

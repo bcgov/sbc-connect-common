@@ -14,7 +14,21 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
-  css: [join(currentDir, './app/assets/css/main.css')],
+  css: [
+    join(currentDir, './app/assets/css/main.css'),
+    '@/assets/css/layout.css'
+  ],
+
+  app: {
+    head: {
+      link: [
+        { rel: 'stylesheet', href: '/css/addresscomplete-2.50.min.css' }
+      ],
+      script: [
+        { src: '/js/addresscomplete-2.50.min.js', type: 'text/javascript', defer: true }
+      ]
+    }
+  },
 
   modules: [
     '@nuxt/ui',
@@ -73,7 +87,8 @@ export default defineNuxtConfig({
       appName: process.env.npm_package_name || '',
       registryHomeURL: process.env.NUXT_REGISTRY_HOME_URL,
       version: `BRD UI v${process.env.npm_package_version || ''}`,
-      environment: process.env.NUXT_ENVIRONMENT_HEADER || ''
+      environment: process.env.NUXT_ENVIRONMENT_HEADER || '',
+      addressCompleteKey: process.env.NUXT_ADDRESS_COMPLETE_KEY
     }
   },
 

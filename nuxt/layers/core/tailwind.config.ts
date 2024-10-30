@@ -8,6 +8,7 @@ export default <Partial<Config>>{
         sans: ['BCSans', 'Verdana', 'Arial', 'sans-serif']
       },
       maxWidth: {
+        bcGovInput: '600px',
         bcGovMd: '1020px',
         bcGovLg: '1360px'
       },
@@ -75,6 +76,19 @@ export default <Partial<Config>>{
           800: '#002753',
           900: '#002049',
           950: '#001438'
+        },
+        midnightBlue: {
+          50: '#eef7ff',
+          100: '#dceeff',
+          200: '#b2dfff',
+          300: '#6dc6ff',
+          400: '#20a8ff',
+          500: '#008dff',
+          600: '#006edf',
+          700: '#0057b4',
+          800: '#004a94',
+          900: '#003366',
+          950: '#002651'
         },
         red: {
           50: '#fef2f2',

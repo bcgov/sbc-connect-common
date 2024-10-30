@@ -44,12 +44,15 @@
     "@nuxtjs/i18n": "^8.3.1",
     "@pinia-plugin-persistedstate/nuxt": "^1.2.1",
     "@pinia/nuxt": "^0.5.1",
+    "@vuepic/vue-datepicker": "^9.0.3",
     "@vueuse/nuxt": "^10.11.0",
+    "country-codes-list": "^1.6.11",
     "dompurify": "^3.1.6",
     "jsdom": "^24.0.1",
     "keycloak-js": "^25.0.1",
     "launchdarkly-vue-client-sdk": "^2.2.2",
     "maska": "^3.0.2",
+    "vue-country-flag-next": "^2.3.2",
     "zod": "^3.23.8"
   }
 }
