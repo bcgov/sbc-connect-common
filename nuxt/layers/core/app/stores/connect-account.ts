@@ -191,7 +191,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
     }
   }
 
-  function checkAccountStatus () {
+  async function checkAccountStatus () {
     // redirect if account status is suspended or in review
     if ([AccountStatus.NSF_SUSPENDED, AccountStatus.SUSPENDED].includes(currentAccount.value?.accountStatus)) {
       // Avoid redirecting when navigating back from PAYBC for NSF or signout.
@@ -202,7 +202,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
         const redirectUrl = `${useRuntimeConfig().public.authWebURL}/account-freeze`
         // TODO: should probably change this to check 'appName' when auth starts using the core layer
         const external = useRuntimeConfig().public.authWebURL !== useRuntimeConfig().public.baseUrl
-        navigateTo(redirectUrl, { external })
+        await navigateTo(redirectUrl, { external })
       }
     } else if (currentAccount.value?.accountStatus === AccountStatus.PENDING_STAFF_REVIEW) {
       // check the path is allowed for pending approval account
@@ -218,7 +218,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
         const redirectUrl = `${useRuntimeConfig().public.authWebURL}/pendingapproval/${accountNameEncoded}/true`
         // TODO: should probably change this to check 'appName' when auth starts using the core layer
         const external = useRuntimeConfig().public.authWebURL !== useRuntimeConfig().public.baseUrl
-        navigateTo(redirectUrl, { external })
+        await navigateTo(redirectUrl, { external })
       }
     }
   }
