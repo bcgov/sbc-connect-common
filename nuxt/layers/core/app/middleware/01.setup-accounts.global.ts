@@ -5,6 +5,7 @@ export default defineNuxtRouteMiddleware(async () => {
       const accountStore = useConnectAccountStore()
       await accountStore.setAccountInfo()
       await accountStore.setUserName()
+      accountStore.checkAccountStatus()
       if (accountStore.currentAccount.id && kcUser.value.keycloakGuid) { // check for pending approvals
         await accountStore.getPendingApprovalCount(parseInt(accountStore.currentAccount.id), kcUser.value.keycloakGuid)
       }
