@@ -10,11 +10,12 @@ readme = "README.md"
 packages = [{include = "flask_jwt_oidc", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">3.9.1"
 Flask = ">=2"
 cachelib = "0.*"
 pyjwt = "^2.8.0"
 six = "^1.16.0"
+cryptography = "^44.0.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
