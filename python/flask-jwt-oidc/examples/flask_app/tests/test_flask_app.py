@@ -1,4 +1,4 @@
-from flask import jsonify, g, _request_ctx_stack
+from flask import jsonify, g
 
 
 def test_public_api(client):
@@ -123,7 +123,6 @@ def test_current_user_set(app, client, jwt):
     rv = client.get('/api/secure', headers=headers)
 
     assert rv
-    assert _request_ctx_stack.top.current_user.get('username') == claims.get('username')
     assert g.jwt_oidc_token_info.get('username') == claims.get('username')
 
 
