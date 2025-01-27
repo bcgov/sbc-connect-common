@@ -1,5 +1,9 @@
 export default {
   btn: {
+    appVersion: {
+      show: "Afficher la version de l'application",
+      hide: "Masquer la version de l'application"
+    },
     bcRegHome: 'Accueil des Registres de la CB',
     createAccount: 'Créer un Compte',
     editProfile: 'Editer le Profil',
@@ -14,13 +18,14 @@ export default {
     },
     accountOptionsMenu: 'Menu Options du Compte',
     whatsNew: 'Quoi de Neuf',
-    mainMenu: 'Menu principal'
+    mainMenu: 'Menu principal',
+    goHome: "Retour à l'Accueil"
   },
   label: {
     accountSettings: 'Paramètres Compte',
     bcRegOLServices: 'Registres et Services en ligne de la CB',
     switchAccount: 'Changer de Compte',
-    selectLoginMethod: 'Sélectionnez la Méthode de Connexion',
+    selectLoginMethod: 'Sélectionnez la méthode de connexion',
     bcsc: 'BC Services Card',
     bceid: 'BCeID',
     idir: 'IDIR'
@@ -32,6 +37,7 @@ export default {
   ConnectFooter: {
     navLabel: 'Liens utiles', // <nav> aria-label
     home: 'Accueil',
+    releaseNotes: 'Notes de Version',
     disclaimer: 'Clause de non-responsabilité',
     privacy: 'Confidentialité',
     ally: 'Accessibilité',
@@ -50,5 +56,24 @@ export default {
   ConnectLocaleSelect: {
     // aria-label
     label: 'Sélectionnez une langue, langue courante: Français'
+  },
+  ConnectBreadcrumb: {
+    default: 'Service Connect CB',
+    backBtn: 'Retour',
+    arialabel: "Fil d'Ariane"
+  },
+  ConnectPage: {
+    error: {
+      404: {
+        title: 'Page Introuvable - Service Connect CB',
+        h1: '404 Page Introuvable',
+        content: 'Cette page est introuvable ou n’existe pas.'
+      },
+      unknown: {
+        title: 'Erreur Inconnue - Service Connect CB',
+        h1: 'Erreur Inconnue',
+        content: 'Une erreur inconnue s’est produite, veuillez actualiser la page ou réessayer plus tard.'
+      }
+    }
   }
 }

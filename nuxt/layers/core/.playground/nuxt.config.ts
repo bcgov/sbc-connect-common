@@ -4,7 +4,7 @@ const playgroundDir = resolve(__dirname)
 const currentDir = resolve(playgroundDir, '..')
 export default defineNuxtConfig({
   extends: ['..'],
-  modules: ['@nuxtjs/eslint-module', '@nuxt/test-utils/module', "@nuxt/image"],
+  modules: ['@nuxt/test-utils/module', "@nuxt/image"],
   compatibilityDate: "2024-07-16",
   future: {
     compatibilityVersion: 4
@@ -19,7 +19,7 @@ export default defineNuxtConfig({
       'utils'
     ]
   },
-  css: [join(currentDir, './app/assets/css/main.css')],
+  // css: [join(currentDir, './app/assets/css/core-main.css')],
   alias: {
     BCGovFonts: join(currentDir, './public/fonts/BCSans'),
     BCGovLogoSmEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_en.png'),

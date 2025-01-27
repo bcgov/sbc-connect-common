@@ -13,13 +13,22 @@ export default defineNuxtConfig({
     compatibilityVersion: 4
   },
 
-  css: [join(currentDir, './app/assets/css/main.css')],
+  nitro: {
+    prerender: {
+      ignore: [] // ignore tos/login pages by default
+    }
+  },
+
+  css: [
+    join(currentDir, './app/assets/css/core-main.css'),
+    join(currentDir, './app/assets/css/core-layout.css')
+  ],
 
   modules: [
     '@nuxt/ui',
     '@nuxt/content',
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     '@nuxt/image'
@@ -67,9 +76,15 @@ export default defineNuxtConfig({
       keycloakRealm: process.env.NUXT_KEYCLOAK_REALM,
       keycloakClientId: process.env.NUXT_KEYCLOAK_CLIENTID,
       authWebURL: process.env.NUXT_AUTH_WEB_URL,
-      authApiURL: `${process.env.NUXT_AUTH_API_URL || ''}${process.env.NUXT_AUTH_API_VERSION || ''}`
-      // registryHomeURL: process.env.NUXT_REGISTRY_HOME_URL
-      // appBaseUrl: process.env.NUXT_APP_BASE_URL
+      authApiURL: `${process.env.NUXT_AUTH_API_URL || ''}${process.env.NUXT_AUTH_API_VERSION || ''}`,
+      ldClientId: process.env.NUXT_LD_CLIENT_ID || '',
+      appName: process.env.npm_package_name || '',
+      registryHomeURL: process.env.NUXT_REGISTRY_HOME_URL,
+      version: `BRD UI v${process.env.npm_package_version || ''}`,
+      environment: process.env.NUXT_ENVIRONMENT_HEADER || '',
+      baseUrl: process.env.NUXT_BASE_URL,
+      paymentPortalUrl: process.env.NUXT_PAYMENT_PORTAL_URL,
+      payApiURL: `${process.env.NUXT_PAY_API_URL}${process.env.NUXT_PAY_API_VERSION}`
     }
   },
 
@@ -98,7 +113,7 @@ export default defineNuxtConfig({
     vueI18n: './i18n.config.ts'
   },
 
-  piniaPersistedstate: {
+  piniaPluginPersistedstate: {
     storage: 'sessionStorage'
   }
 })

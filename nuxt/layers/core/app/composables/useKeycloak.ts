@@ -1,6 +1,5 @@
-import { resetPiniaStores } from '~/utils/resetPiniaStores'
 export const useKeycloak = () => {
-  const { $keycloak, $i18n } = useNuxtApp()
+  const { $keycloak } = useNuxtApp()
 
   /**
    * Logs the user in using the idpHint 'bcsc', 'idir' or 'bceid' and an optional redirect URL.
@@ -9,10 +8,13 @@ export const useKeycloak = () => {
    * @returns A promise that resolves when login is complete.
    */
   function login (idpHint: IdpHint, redirect?: string): Promise<void> {
+    const loginRedirectUrl = sessionStorage.getItem(ConnectStorageKeys.LOGIN_REDIRECT_URL)
+    const redirectUri = redirect ?? loginRedirectUrl ?? window.location.href
+
     return $keycloak.login(
       {
         idpHint,
-        redirectUri: redirect ?? `${location.origin}/${$i18n.locale.value}`
+        redirectUri
       }
     )
   }
@@ -23,9 +25,12 @@ export const useKeycloak = () => {
    * @returns A promise that resolves when logout is complete.
    */
   function logout (redirect?: string): Promise<void> {
+    const logoutRedirectUrl = sessionStorage.getItem(ConnectStorageKeys.LOGOUT_REDIRECT_URL)
+    const redirectUri = redirect ?? logoutRedirectUrl ?? window.location.href
+
     resetPiniaStores()
     return $keycloak.logout({
-      redirectUri: redirect ?? `${location.origin}/${$i18n.locale.value}`
+      redirectUri
     })
   }
 
@@ -70,10 +75,30 @@ export const useKeycloak = () => {
       })
   }
 
+  function setLoginRedirectUrl (url: string) {
+    sessionStorage.setItem(ConnectStorageKeys.LOGIN_REDIRECT_URL, url)
+  }
+
+  function setLogoutRedirectUrl (url: string) {
+    sessionStorage.setItem(ConnectStorageKeys.LOGOUT_REDIRECT_URL, url)
+  }
+
+  function clearLoginRedirectUrl () {
+    sessionStorage.removeItem(ConnectStorageKeys.LOGIN_REDIRECT_URL)
+  }
+
+  function clearLogoutRedirectUrl () {
+    sessionStorage.removeItem(ConnectStorageKeys.LOGOUT_REDIRECT_URL)
+  }
+
   return {
     login,
     logout,
     getToken,
+    clearLoginRedirectUrl,
+    clearLogoutRedirectUrl,
+    setLoginRedirectUrl,
+    setLogoutRedirectUrl,
     isAuthenticated,
     kcUser
   }
