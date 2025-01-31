@@ -17,6 +17,25 @@ useRoute().meta.hideBreadcrumbs = true
 useHead({
   title: errorKey === 404 ? t('ConnectPage.error.404.title') : t('ConnectPage.error.unknown.title')
 })
+
+const manageError = async () => {
+  clearError()
+  await navigateTo(localePath('/'))
+}
+
+const errorObj = {
+  name: props.error?.name || '',
+  cause: props.error?.cause || '',
+  message: props.error?.message || '',
+  statusCode: props.error?.statusCode || '',
+  statusMessage: props.error?.statusMessage || '',
+  stack: props.error?.stack || '',
+  data: props.error?.data || ''
+}
+
+onMounted(() => {
+  console.error('Nuxt Application Error: ', errorObj)
+})
 </script>
 <template>
   <NuxtLayout name="default">
@@ -29,7 +48,7 @@ useHead({
         :label="$t('btn.goHome')"
         icon="i-mdi-home"
         size="bcGov"
-        :to="localePath('/')"
+        @click="manageError"
       />
     </div>
   </NuxtLayout>
