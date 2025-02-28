@@ -91,6 +91,7 @@ export default defineNuxtConfig({
       baseUrl: process.env.NUXT_BASE_URL,
       paymentPortalUrl: process.env.NUXT_PAYMENT_PORTAL_URL,
       payApiURL: `${process.env.NUXT_PAY_API_URL}${process.env.NUXT_PAY_API_VERSION}`,
+      statusApiURL: `${process.env.NUXT_STATUS_API_URL}${process.env.NUXT_STATUS_API_VERSION}`,
       tokenRefreshInterval: process.env.NUXT_KEYCLOAK_REFRESH_INTERVAL || 30000, // default 30 seconds
       tokenMinValidity: process.env.NUXT_KEYCLOAK_MIN_TOKEN_VALIDITY || 120000, // default 2 mins
       sessionIdleTimeout: process.env.NUXT_CONNECT_SESSION_INACTIVITY_TIMEOUT || 1800000, // default 30 mins

@@ -10,12 +10,12 @@ export default defineAppConfig({
         options: {
           localeSelect: true,
           unauthenticated: {
-            whatsNew: false,
+            whatsNew: true,
             loginMenu: true,
-            createAccount: false
+            createAccount: true
           },
           authenticated: {
-            notifications: false,
+            notifications: true,
             accountOptionsMenu: true
           }
         }

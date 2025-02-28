@@ -9,7 +9,7 @@ export default defineAppConfig({
         options: { // display/hide items
           localeSelect: true,
           unauthenticated: {
-            whatsNew: false,
+            whatsNew: true,
             loginMenu: true,
             createAccount: true
           },
@@ -36,8 +36,8 @@ export default defineAppConfig({
   // https://ui3.nuxt.dev/getting-started/theme#design-system
   ui: {
     colors: {
-      primary: "blue",
-      neutral: "gray"
+      primary: 'blue',
+      neutral: 'gray'
     },
     button: {
       variants: {
@@ -70,7 +70,7 @@ export default defineAppConfig({
           },
           false: {
             item: 'text-(--ui-text) data-highlighted:text-bcGovColor-activeBlue data-[state=open]:text-(--ui-text-highlighted) data-highlighted:before:bg-bcGovGray-100 data-[state=open]:before:bg-(--ui-bg-elevated)/50 transition-colors before:transition-colors',
-            itemLeadingIcon: 'text-bcGovGray-700 group-data-highlighted:text-bcGovColor-activeBlue group-data-[state=open]:text-(--ui-text) transition-colors',
+            itemLeadingIcon: 'text-bcGovGray-700 group-data-highlighted:text-bcGovColor-activeBlue group-data-[state=open]:text-(--ui-text) transition-colors'
           }
         },
         size: {
@@ -106,7 +106,6 @@ export default defineAppConfig({
     }
   }
 })
-
 
 // export default defineAppConfig({
 //   connect: {

@@ -1,7 +1,7 @@
 import { initialize } from 'launchdarkly-js-client-sdk'
 import type { LDClient, LDFlagSet, LDOptions, LDMultiKindContext } from 'launchdarkly-js-client-sdk'
 
-export const useConnectLaunchdarklyStore = defineStore('nuxt-core-connect-ld-store', () => {
+export const useConnectLaunchdarklyStore = defineStore('core-connect-ld-store', () => {
   const keycloak = reactive(useKeycloak())
   const accountStore = useConnectAccountStore()
   const ldClient: Ref<LDClient | null> = ref(null)

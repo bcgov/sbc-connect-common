@@ -1,13 +1,18 @@
 import { ConnectSlideoverWhatsNew } from '#components'
 
 export const useConnectSlideover = () => {
-  const slideover = useSlideover()
+  const overlay = useOverlay()
+  // const slideover = useSlideover()
 
-  function openWhatsNewSlideover () {
-    slideover.open(ConnectSlideoverWhatsNew)
-  }
+  const whatsNew = overlay.create(ConnectSlideoverWhatsNew)
+
+  // async function openWhatsNewSlideover () {
+  //   await whatsNewSlideover.open()
+  //   // slideover.open(ConnectSlideoverWhatsNew)
+  // }
 
   return {
-    openWhatsNewSlideover
+    whatsNew
+    // openWhatsNewSlideover
   }
 }

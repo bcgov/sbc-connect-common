@@ -1,40 +1,28 @@
 <script setup lang="ts">
+import { useConnectWhatsNewStore } from '~/stores/connect-whats-new'
+
 const { loggedOutUserOptions, loggedOutUserOptionsMobile } = useConnectNav()
 const isLargeScreen = useMediaQuery('(min-width: 1024px)')
+const whatsNewStore = useConnectWhatsNewStore()
 </script>
 <template>
   <UDropdownMenu
     id="logged-out-options-dropdown"
     :items="isLargeScreen ? loggedOutUserOptions : loggedOutUserOptionsMobile"
   >
-    <!-- login button on large screens -->
     <UButton
-      class="hidden lg:flex"
       color="white"
-      :label="$t('btn.login')"
-      :aria-label="$t('label.selectLoginMethod')"
-      icon="i-mdi-caret-down"
+      :label="isLargeScreen ? $t('btn.login') : undefined"
+      :aria-label="isLargeScreen ? $t('label.selectLoginMethod') : $t('btn.mainMenu')"
+      :icon="isLargeScreen ? 'i-mdi-caret-down' : 'i-mdi-menu'"
       trailing
     />
-    <!-- main menu icon/button on small screens -->
-    <!-- <UButton
-      class="flex lg:hidden"
-      color="white"
-      :aria-label="$t('btn.mainMenu')"
-      icon="i-mdi-menu"
-      trailing
-    /> -->
-
-    <template #method>
-      <span class="pointer-events-none text-sm font-semibold text-bcGovColor-darkGray"> {{ $t('label.selectLoginMethod') }} </span>
-    </template>
 
     <!-- whats new slot, only shows on small screens -->
-    <!-- TODO: implement whats new -->
     <template #whats-new="{ item }">
-      <UIcon :name="item.icon" class="size-6 shrink-0 text-bcGovColor-midGray" />
+      <UIcon v-if="item.icon" :name="item.icon" class="size-6 shrink-0 text-bcGovColor-midGray" />
       <span class="truncate">{{ item.label }}</span>
-      <span class="size-2 rounded-full bg-red-500" />
+      <span v-if="!whatsNewStore.hasViewedWhatsNew && !!whatsNewStore.whatsNewItems.length" class="size-2 rounded-full bg-red-500" />
     </template>
   </UDropdownMenu>
 </template>

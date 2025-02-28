@@ -1,4 +1,5 @@
 import type { DropdownMenuItem } from '@nuxt/ui'
+import { useConnectWhatsNewStore } from '~/stores/connect-whats-new'
 
 // handle navigation items and functionality
 export function useConnectNav () {
@@ -12,6 +13,7 @@ export function useConnectNav () {
   const locale = useNuxtApp().$i18n.locale.value
   const { login, logout, isAuthenticated, kcUser } = useKeycloak()
   const accountStore = useConnectAccountStore()
+  const whatsNewStore = useConnectWhatsNewStore()
 
   /** return the correct account creation link based on auth state */
   function createAccountUrl (): string {
@@ -146,15 +148,7 @@ export function useConnectNav () {
   }
 
   const loggedOutUserOptions = computed<DropdownMenuItem[][]>(() => {
-    const options = [
-      [
-        {
-          label: 'n/a',
-          slot: 'method',
-          disabled: true
-        }
-      ]
-    ]
+    const options: DropdownMenuItem[][] = [[{ label: t('label.selectLoginMethod'), type: 'label' }]]
 
     const idps = layerConfig.login.idps.map(key => loginOptionsMap[key])
 
@@ -164,15 +158,16 @@ export function useConnectNav () {
   })
 
   const loggedOutUserOptionsMobile = computed<DropdownMenuItem[][]>(() => {
-    const options = []
+    const config = layerConfig.header.options.unauthenticated
+    const options: DropdownMenuItem[][] = []
 
-    if (layerConfig.header.options.unauthenticated.loginMenu) {
+    if (config.loginMenu) {
       options.push(...loggedOutUserOptions.value)
     }
-    if (layerConfig.header.options.unauthenticated.whatsNew) {
-      options.push([{ label: t('btn.whatsNew'), slot: 'whats-new', icon: 'i-mdi-new-box', onSelect: () => console.log('whats new clicked') }])
+    if (config.whatsNew) {
+      options.push([{ label: t('btn.whatsNew'), slot: 'whats-new', icon: 'i-mdi-new-box', onSelect: async () => await whatsNewStore.openWhatsNewSlideover() }])
     }
-    if (layerConfig.header.options.unauthenticated.createAccount) {
+    if (config.createAccount) {
       options.push([{ label: t('btn.createAccount'), icon: 'i-mdi-plus', to: createAccountUrl() }])
     }
 
