@@ -103,14 +103,14 @@ export default defineNuxtConfig({
       {
         name: 'English',
         code: 'en-CA',
-        iso: 'en-CA',
+        language: 'en-CA',
         dir: 'ltr',
         file: 'en-CA.ts'
       },
       {
         name: 'Français',
         code: 'fr-CA',
-        iso: 'fr-CA',
+        language: 'fr-CA',
         dir: 'ltr',
         file: 'fr-CA.ts'
       }

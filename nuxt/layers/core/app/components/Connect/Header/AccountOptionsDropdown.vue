@@ -4,19 +4,15 @@ const { kcUser } = useKeycloak()
 const accountStore = useConnectAccountStore()
 </script>
 <template>
-  <UDropdown
+  <UDropdownMenu
     id="account-options-dropdown"
     :items="loggedInUserOptions"
-    :ui="{
-      padding: 'py-3 px-0'
-    }"
   >
     <!-- display full name/account/avatar on large screens -->
     <UButton
       id="account-options-button"
       class="hidden lg:flex"
       color="white"
-      variant="header"
       :aria-label="$t('btn.accountOptionsMenu')"
       icon="i-mdi-caret-down"
       trailing
@@ -27,7 +23,7 @@ const accountStore = useConnectAccountStore()
       />
     </UButton>
     <!-- only use avatar on small screens -->
-    <UButton
+    <!-- <UButton
       class="lg:hidden"
       color="white"
       variant="header"
@@ -42,7 +38,7 @@ const accountStore = useConnectAccountStore()
           rounded: 'rounded-sm'
         }"
       />
-    </UButton>
+    </UButton> -->
 
     <!-- account label slot -->
     <template #account>
@@ -62,5 +58,5 @@ const accountStore = useConnectAccountStore()
     <template #accounts>
       <span class="text-bcGovColor-darkGray">{{ $t('label.switchAccount') }}</span>
     </template>
-  </UDropdown>
+  </UDropdownMenu>
 </template>

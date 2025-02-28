@@ -13,5 +13,6 @@ const config = inject<HeaderOptions>(headerOptionsSymbol)
     <ConnectHeaderNotifications v-if="config?.authenticated.notifications" />
     <!-- account options dropdown -->
     <ConnectHeaderAccountOptionsDropdown v-if="config?.authenticated.accountOptionsMenu" />
+    <!-- <ConnectHeaderAccountOptionsDropdownV2 /> -->
   </div>
 </template>

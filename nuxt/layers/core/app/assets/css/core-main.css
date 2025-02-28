@@ -1,7 +1,7 @@
-@import "tailwindcss" theme(static);
+@import "tailwindcss";
 @import "@nuxt/ui";
 
-@theme static {
+@theme {
   /* font */
   --font-sans: 'BCSans', 'Verdana', 'Arial', 'sans-serif';
 
