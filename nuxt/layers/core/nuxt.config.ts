@@ -46,16 +46,17 @@ export default defineNuxtConfig({
     ]
   },
 
-  ui: {
-    icons: ['mdi']
-  },
+  // ui: {
+  //   icons: ['mdi']
+  // },
 
   alias: {
     BCGovFonts: join(currentDir, './public/fonts/BCSans'),
     BCGovLogoSmEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_en.png'),
     BCGovLogoSmFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_fr.png'),
     BCGovLogoLgEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_en.png'),
-    BCGovLogoLgFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_fr.png')
+    BCGovLogoLgFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_fr.png'),
+    '#core': fileURLToPath(new URL('./', import.meta.url))
   },
 
   colorMode: {
