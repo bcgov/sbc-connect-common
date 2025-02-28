@@ -4,22 +4,23 @@ import {
 } from '#components'
 
 export const useConnectModals = () => {
-  const modal = useModal()
+  // const modal = useModal()
+  const overlay = useOverlay()
 
-  function openSessionExpiringModal (cb: () => void) {
-    modal.open(ConnectModalSessionExpiring, {
-      onAfterLeave () {
-        cb()
+  async function openSessionExpiringModal (cb: () => void) {
+    const modal = overlay.create(ConnectModalSessionExpiring, {
+      props: {
+        onAfterLeave () {
+          cb()
+        },
+        closeFn: () => modal.close()
       }
     })
-  }
 
-  function close () {
-    modal.close()
+    await modal.open()
   }
 
   return {
-    openSessionExpiringModal,
-    close
+    openSessionExpiringModal
   }
 }

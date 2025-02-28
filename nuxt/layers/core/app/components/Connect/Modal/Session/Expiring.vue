@@ -1,8 +1,11 @@
 <script setup lang="ts">
-const modalModel = defineModel({ type: Boolean, default: false })
 const isSmallScreen = useMediaQuery('(max-width: 640px)')
 const modalTimeout = useRuntimeConfig().public.sessionExpiredModalTimeout
 const { t } = useI18n()
+
+const props = defineProps<{
+  closeFn:() => void
+}>()
 
 defineEmits<{
   afterLeave: [void]
@@ -25,7 +28,7 @@ const ariaCountdownText = computed(() => {
 })
 
 function closeModal () {
-  modalModel.value = false
+  props.closeFn()
 }
 
 onMounted(async () => {
@@ -48,34 +51,13 @@ onUnmounted(() => {
 <template>
   <UModal
     id="session-expired-dialog"
-    v-model="modalModel"
     overlay
-    :ui="{ width: 'w-full sm:max-w-lg md:min-w-min' }"
-    role="alertdialog"
+    :title="$t('ConnectModalSessionExpiring.title')"
+    :description="$t('ConnectModalSessionExpiring.content', { count: timeRemaining })"
     @after-leave="$emit('afterLeave')"
   >
-    <UCard
-      :ui="{
-        divide: '',
-        rounded: 'rounded',
-        body: {
-          base: '',
-          background: '',
-          padding: 'px-6 py-0 sm:px-10 sm:py-0'
-        },
-        header: {
-          base: '',
-          background: '',
-          padding: 'px-6 py-6 sm:px-10 sm:py-10'
-        },
-        footer: {
-          base: '',
-          background: '',
-          padding: 'px-6 py-6 sm:px-10 sm:py-10'
-        }
-      }"
-    >
-      <template #header>
+    <template #content>
+      <div class="px-6 py-6 flex flex-col gap-6">
         <div role="alert">
           <h2
             id="session-expired-dialog-title"
@@ -84,21 +66,17 @@ onUnmounted(() => {
             {{ $t('ConnectModalSessionExpiring.title') }}
           </h2>
         </div>
-      </template>
+        <div>
+          <ConnectI18nHelper
+            id="session-expired-dialog-description"
+            translation-path="ConnectModalSessionExpiring.content"
+            :count="timeRemaining"
+          />
 
-      <div>
-        <ConnectI18nHelper
-          id="session-expired-dialog-description"
-          translation-path="ConnectModalSessionExpiring.content"
-          :count="timeRemaining"
-        />
-
-        <div role="alert">
-          <span class="sr-only">{{ ariaCountdownText }}</span>
+          <div role="alert">
+            <span class="sr-only">{{ ariaCountdownText }}</span>
+          </div>
         </div>
-      </div>
-
-      <template #footer>
         <div class="flex flex-wrap items-center justify-center gap-4">
           <UButton
             :block="isSmallScreen"
@@ -106,10 +84,10 @@ onUnmounted(() => {
             :aria-label="$t('ConnectModalSessionExpiring.continueBtn.aria')"
             size="bcGov"
             class="font-bold"
-            @click="modalModel = false"
+            @click="closeFn"
           />
         </div>
-      </template>
-    </UCard>
+      </div>
+    </template>
   </UModal>
 </template>

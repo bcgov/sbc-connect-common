@@ -43,6 +43,14 @@ export default defineAppConfig({
       variants: {
         color: {
           white: 'text-white text-sm tracking-wide dark:text-white hover:bg-white/[0.1] focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300 ease-in-out'
+        },
+        size: {
+          bcGov: {
+            base: 'px-7 py-3 text-sm gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          }
         }
       }
     },
@@ -103,6 +111,15 @@ export default defineAppConfig({
           }
         }
       ]
+    },
+    modal: {
+      variants: {
+        fullscreen: {
+          false: {
+            content: 'rounded'
+          }
+        }
+      }
     }
   }
 })
