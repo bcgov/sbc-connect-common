@@ -39,6 +39,21 @@ export default defineAppConfig({
       primary: 'blue',
       neutral: 'gray'
     },
+    breadcrumb: {
+      slots: {
+        separatorIcon: 'text-white'
+      },
+      variants: {
+        active: {
+          true: {
+            link: 'text-white underline font-medium'
+          },
+          false: {
+            link: 'text-white font-medium'
+          }
+        }
+      }
+    },
     button: {
       variants: {
         color: {
