@@ -20,8 +20,6 @@ const breadcrumbs = computed<ConnectBreadcrumb[]>(() => {
   }
 })
 
-watchEffect(() => console.log(breadcrumbs.value))
-
 function resolveBackHref () {
   const bcLength = breadcrumbs.value.length
 
@@ -40,8 +38,9 @@ function resolveBackHref () {
   >
     <div class="mx-auto flex max-w-bcGovLg items-center px-4 py-2 gap-3">
       <UButton
-        class="size-[28px] rounded-full px-1 bg-white"
+        class="size-[28px] rounded-full px-1 bg-white hover:bg-white/75"
         :disabled="breadcrumbs.length < 2"
+        color="white"
         icon="i-mdi-arrow-left"
         :aria-label="$t('ConnectBreadcrumb.backBtn')"
         :to="resolveBackHref()"

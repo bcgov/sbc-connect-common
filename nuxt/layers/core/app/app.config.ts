@@ -52,7 +52,17 @@ export default defineAppConfig({
             link: 'text-white font-medium'
           }
         }
-      }
+      },
+      compoundVariants: [
+        {
+          disabled: false,
+          active: false,
+          to: true,
+          class: {
+            link: 'hover:text-white hover:underline transition-colors'
+          }
+        }
+      ]
     },
     button: {
       variants: {
@@ -131,9 +141,15 @@ export default defineAppConfig({
       variants: {
         fullscreen: {
           false: {
-            content: 'rounded'
+            content: 'rounded-sm'
           }
         }
+      }
+    },
+    tooltip: {
+      slots: {
+        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white',
+        arrow: 'fill-gray-700'
       }
     }
   }
