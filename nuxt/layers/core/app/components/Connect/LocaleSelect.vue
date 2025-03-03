@@ -8,8 +8,7 @@ const items = computed(() => {
       label: loc.name || 'N/A',
       icon: isCurrentLocal ? 'i-mdi-check' : '',
       onSelect: () => setLocale(loc.code),
-      class: isCurrentLocal ? 'bg-bcGovGray-100 text-bcGovColor-activeBlue' : '',
-      iconClass: isCurrentLocal ? 'text-bcGovColor-activeBlue' : ''
+      class: isCurrentLocal ? 'bg-bcGovGray-100 text-bcGovColor-activeBlue' : ''
     }
   })
   return [options]
@@ -29,8 +28,8 @@ const items = computed(() => {
 
     <template #item="{ item }">
       <div class="group flex items-center gap-1.5 w-full">
-        <UIcon v-if="item.icon" :name="item.icon" :class="[item.iconClass, 'flex-shrink-0 w-5 h-5']" />
-        <span :class="[item.labelClass, 'truncate']">{{ item.label }}</span>
+        <UIcon v-if="item.icon" :name="item.icon" class="text-bcGovColor-activeBlue flex-shrink-0 size-5" />
+        <span class="truncate">{{ item.label }}</span>
       </div>
     </template>
   </UDropdownMenu>
