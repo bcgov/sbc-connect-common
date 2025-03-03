@@ -79,6 +79,11 @@ export default defineAppConfig({
         }
       }
     },
+    card: {
+      slots: {
+        root: 'rounded-sm'
+      }
+    },
     dropdownMenu: {
       slots: {
         content: 'min-w-32 max-h-[75dvh] w-min bg-(--ui-bg) shadow-lg rounded-[calc(var(--ui-radius)*1.5)] ring ring-(--ui-border) divide-y divide-(--ui-border) overflow-y-auto scroll-py-1 data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in]',

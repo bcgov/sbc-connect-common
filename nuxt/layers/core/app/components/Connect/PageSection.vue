@@ -1,11 +1,5 @@
 <script setup lang="ts">
-// TODO: test all props and prop types are passed correctly
-import type { Button, ButtonVariant } from '#ui/types'
-
-interface HeaderAction extends Omit<Button, 'variant'> {
-  click?: (...args: any[]) => void
-  variant?: ButtonVariant | string // force variant type
-}
+import type { ButtonProps } from '#ui/types'
 
 defineProps<{
   heading?: {
@@ -14,26 +8,21 @@ defineProps<{
     level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
     icon?: string
     iconClass?: string
-    bgColor?: string
-    padding?: string
+    ui?: string
   },
-  actions?: HeaderAction[]
+  uiBody?: string
+  actions?: ButtonProps[]
 }>()
 </script>
 <template>
   <UCard
     as="section"
     class="w-full"
+    variant="outline"
     :ui="{
-      rounded: 'rounded',
-      header: {
-        base: 'rounded-t',
-        background: heading?.bgColor ?? 'bg-bcGovColor-gray2',
-        padding: heading?.padding ?? 'px-4 py-4 sm:px-4',
-      },
-      body: {
-        padding: 'px-0 py-0 sm:p-0',
-      },
+      header: heading?.ui ?? 'bg-bcGovColor-gray2 px-4 py-4 sm:px-4 rounded-t-sm',
+      body: uiBody ?? 'p-0 sm:p-0',
+      footer: 'p-0 sm:p-0'
     }"
   >
     <template v-if="heading?.label || $slots.header" #header>
@@ -54,11 +43,7 @@ defineProps<{
             <UButton
               v-for="(action, i) in actions"
               :key="i"
-              v-bind="{
-                ...action,
-                variant: action.variant as ButtonVariant // force cast of button type
-              }"
-              @click="action.click && action.click()"
+              v-bind="action"
             />
           </div>
         </div>

@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useTestStore } from '~/stores/test-store';
 import { manageAccountChange } from '../utils/manageAccountChange';
+import type { ButtonProps } from '@nuxt/ui';
 
 const connectNav = useConnectNav()
 const localePath = useLocalePath()
 const { isAuthenticated, login, logout } = useKeycloak()
 const ldStore = useConnectLaunchdarklyStore()
 
-const actions = [
+const actions: ButtonProps[] = [
   {
     label: 'test 1',
     variant: 'outline',
-    click: () => console.log('clicked 1')
+    onClick: () => console.log('clicked 1')
   },
   {
     label: 'test 2',
@@ -72,7 +73,7 @@ onMounted(async () => {
     </ClientOnly>
 
     <ConnectPageSection
-      :heading="{ label: 'Hello World', icon: 'i-mdi-account-multiple', bgColor: 'bg-red-200' }"
+      :heading="{ label: 'Hello World', icon: 'i-mdi-account-multiple', ui: 'rounded-t-sm bg-red-200' }"
       :actions="actions"
     >
       some stuff
