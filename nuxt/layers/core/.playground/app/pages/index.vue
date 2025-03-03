@@ -64,6 +64,8 @@ onMounted(async () => {
       Testing
     </h1>
 
+    <ConnectSpinner overlay />
+
     <UButton label="test 2 page" :to="localePath('/test-2')" />
 
     <ClientOnly>

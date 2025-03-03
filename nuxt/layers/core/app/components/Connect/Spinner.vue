@@ -9,7 +9,7 @@ defineProps({
 <template>
   <!-- eslint-disable tailwindcss/no-custom-classname -->
   <Teleport v-if="overlay" to="body">
-    <div class="absolute left-0 top-0 z-[999] h-screen w-screen bg-gray-100 opacity-50" />
+    <div class="fixed left-0 top-0 z-[999] h-screen w-screen bg-gray-100 opacity-50" />
   </Teleport>
   <svg class="spinner" viewBox="0 0 50 50">
     <circle
