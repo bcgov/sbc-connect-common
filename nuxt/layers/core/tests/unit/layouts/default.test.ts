@@ -1,7 +1,15 @@
 import { describe, expect, it, vi } from 'vitest'
 import { renderSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import defaultLayout from '~/layouts/default.vue'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
+
+mockNuxtImport('useRoute', () => {
+  return () => ({
+    meta: {
+      breadcrumbs: []
+    }
+  })
+})
 
 const setLocaleMock = vi.fn()
 mockNuxtImport('useI18n', () => {
@@ -34,7 +42,7 @@ describe('Default Layout', () => {
   it('mounts', async () => {
     const wrapper = await renderSuspended(defaultLayout, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 

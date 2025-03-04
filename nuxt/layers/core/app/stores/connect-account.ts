@@ -128,6 +128,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
   /** Get the user's account list */
   async function getUserAccounts (keycloakGuid: string): Promise<Account[] | undefined> {
     try {
+      // TODO: use orgs fetch instead to get branch name ? $authApi<UserSettings[]>('/users/orgs')
       const response = await $authApi<UserSettings[]>(`/users/${keycloakGuid}/settings`, {
         onResponseError ({ response }) {
           errors.value.push({

@@ -20,6 +20,7 @@ const items = computed(() => {
     :items
   >
     <UButton
+      data-testid="locale-select-dropdown"
       icon="i-mdi-web"
       :aria-label="$t('ConnectLocaleSelect.label')"
       size="lg"

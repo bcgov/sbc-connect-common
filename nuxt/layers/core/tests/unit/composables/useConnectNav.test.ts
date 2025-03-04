@@ -294,8 +294,9 @@ describe('useConnectNav', () => {
       const options = connectNav.loggedOutUserOptions.value[1]
       const idpHints = ['bcsc', 'bceid', 'idir']
       options?.forEach((option, i) => {
-        if (option.click) {
-          option.click()
+        if (option.onSelect) {
+          // @ts-expect-error
+          option.onSelect()
           expect(mockLogin).toHaveBeenCalledWith(idpHints[i])
         }
       })

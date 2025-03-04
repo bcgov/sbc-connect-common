@@ -1,15 +1,27 @@
 import { describe, expect, it } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
-import { ConnectFooter } from '#components'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
+import { ConnectFooter, UApp } from '#components'
 
-describe('<ConnectFooter/>', () => {
-  it('renders footer links', async () => {
-    const wrapper = await mountSuspended(ConnectFooter, {
+describe('<ConnectFooter />', () => {
+  it('Renders footer links', async () => {
+    const wrapper = await mountSuspended({
+      components: { ConnectFooter, UApp },
+      template: `
+        <UApp>
+          <MyComponent />
+        </UApp>
+      `
+    }, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
+    // const wrapper = await mountSuspended(ConnectFooter, {
+    //   global: {
+    //     plugins: [i18nMock]
+    //   }
+    // })
 
     const linkTexts = ['Home', 'Release Notes', 'Disclaimer', 'Privacy', 'Accessibility', 'Copyright']
     const linkHrefs = [

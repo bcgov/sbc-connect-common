@@ -1,7 +1,7 @@
 import { vi, describe, expect, it } from 'vitest'
 import { mountSuspended, renderSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { fireEvent, screen } from '@testing-library/vue'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
 import { ConnectLocaleSelect } from '#components' // eslint cant find the component but test passes
 // import en from '~/locales/en-CA'
@@ -38,7 +38,7 @@ describe('<ConnectLocaleSelect />', () => {
   it('mounts', async () => {
     const wrapper = await renderSuspended(ConnectLocaleSelect, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -48,7 +48,7 @@ describe('<ConnectLocaleSelect />', () => {
   it('can open the dropdown', async () => {
     const wrapper = await renderSuspended(ConnectLocaleSelect, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -68,7 +68,7 @@ describe('<ConnectLocaleSelect />', () => {
   it('can change the locale value', async () => {
     await renderSuspended(ConnectLocaleSelect, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -88,7 +88,7 @@ describe('<ConnectLocaleSelect />', () => {
   it('computed returns correct items for dropdown', async () => {
     const wrapper = await mountSuspended(ConnectLocaleSelect, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -97,8 +97,8 @@ describe('<ConnectLocaleSelect />', () => {
 
     const expectedItems = [
       [
-        { label: 'English', icon: '', class: '', iconClass: '', click: expect.any(Function) },
-        { label: 'French', icon: '', class: '', iconClass: '', click: expect.any(Function) }
+        { label: 'English', icon: '', class: '', iconClass: '', onSelect: expect.any(Function) },
+        { label: 'French', icon: '', class: '', iconClass: '', onSelect: expect.any(Function) }
       ]
     ]
 

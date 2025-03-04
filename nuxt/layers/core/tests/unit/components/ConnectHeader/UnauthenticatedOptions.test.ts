@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { ConnectHeaderUnauthenticatedOptions } from '#components'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
 mockNuxtImport('useConnectNav', () => {
   return () => ({
@@ -28,17 +28,17 @@ describe('<ConnectHeaderUnauthenticatedOptions />', () => {
   it('renders', async () => {
     const wrapper = await mountSuspended(ConnectHeaderUnauthenticatedOptions, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
     expect(wrapper).toBeDefined()
   })
 
-  it('displays login button and create account button on large screens', async () => {
+  it.only('displays login button and create account button on large screens', async () => {
     const wrapper = await mountSuspended(ConnectHeaderUnauthenticatedOptions, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -47,6 +47,7 @@ describe('<ConnectHeaderUnauthenticatedOptions />', () => {
     const loginDropdown = wrapper.find('button[aria-label="Select log in method"]')
     expect(loginDropdown).toBeDefined()
     await loginDropdown.trigger('click')
+    console.log(wrapper.html())
     expect(wrapper.html()).toContain('Log in')
     expect(wrapper.html()).toContain('Create Account')
     expect(wrapper.html()).toContain('Logged Out Desktop')
@@ -56,7 +57,7 @@ describe('<ConnectHeaderUnauthenticatedOptions />', () => {
     mockMediaQuery = false
     const wrapper = await mountSuspended(ConnectHeaderUnauthenticatedOptions, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
