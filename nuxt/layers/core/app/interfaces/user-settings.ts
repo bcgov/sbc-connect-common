@@ -1,9 +1,5 @@
-import { AccountType } from '~/enums/account-type'
-import { AccountStatus } from '~/enums/account-status'
-import { UserSettingsType } from '~/enums/user-settings-type'
-
 export interface UserSettings {
-  id: string
+  id: number
   type: UserSettingsType
   urlpath: string
   urlorigin: string
