@@ -2,35 +2,13 @@
 
 # sbc-connect-common 
 
-## Python Libraries
+> **Warning: Use Latest Version Only**
+>
+> You are currently on the **nuxt-v2** branch of this repository.
+> 
+> If you are using Nuxt UI Version 2, this branch is **incompatible** with your project. Please make sure to use the **main** branch or the appropriate version for Nuxt UI Version 2. 
+>
 
-- structured-logging
-- gcp-queue
-
-
-## Installing
-### Required roles:
-- roles/artifactregistry.reader: All developers
-- roles/artifactregistry.writer: CI/CD and Leads.
-- roles/artifactregistry.repoAdmin: SRE
-### setup repo
-```bash
-gcloud init
-```
-Get your default credentials in place, choose one of:
-```bash
-gcloud auth application-default login
-```
-**or**
-```bash
-poetry self update && poetry self add keyrings.google-artifactregistry-auth
-```
-Register the python artifact repo as _sbc-connect_
-```bash
-export SBC_CONNECT_PYTHON_REPO_URL="https://northamerica-northeast1-python.pkg.dev/c4hnrd-tools/python/"
-poetry config repositories.sbc-connect $SBC_CONNECT_PYTHON_REPO_URL
-poetry source add --priority=explicit sbc-connect $SBC_CONNECT_PYTHON_REPO_URL
-```
 ## How to Contribute
 
 If you would like to contribute, please see our [CONTRIBUTING](./CONTRIBUTING.md) guidelines.
@@ -39,7 +17,7 @@ Please note that this project is released with a [Contributor Code of Conduct](.
 By participating in this project you agree to abide by its terms.
 
 ## License
-Copyright © 2024 Province of British Columbia
+Copyright © 2025 Province of British Columbia
 
 Licensed under the BSD 3 Clause License, (the "License");
 you may not use this file except in compliance with the License.
