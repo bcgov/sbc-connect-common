@@ -21,7 +21,6 @@ onMounted(async () => {
     <UAlert
       v-show="!!message && !close"
       class="border-b-2 border-yellow-400 py-0"
-      color="warning"
       :description="message"
       :close="dismissible"
       close-icon="i-mdi-close"
