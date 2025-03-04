@@ -54,7 +54,7 @@ onUnmounted(() => {
     overlay
     :title="$t('ConnectModalSessionExpiring.title')"
     :description="$t('ConnectModalSessionExpiring.content', { count: timeRemaining })"
-    @after-leave="$emit('afterLeave')"
+    @after:leave="$emit('afterLeave')"
   >
     <template #content>
       <div class="px-6 py-6 flex flex-col gap-6">
