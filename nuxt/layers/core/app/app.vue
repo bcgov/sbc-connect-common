@@ -13,12 +13,9 @@ useHead({
 })
 </script>
 <template>
-  <div>
-    <NuxtLayout>
+  <NuxtLayout>
+    <UApp>
       <NuxtPage />
-    </NuxtLayout>
-    <UNotifications />
-    <UModals />
-    <USlideovers />
-  </div>
+    </UApp>
+  </NuxtLayout>
 </template>
