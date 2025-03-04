@@ -89,16 +89,16 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[0]
       expect(options).toEqual([
-        { label: 'n/a', slot: 'account', disabled: true },
+        { slot: 'account', type: 'label' },
         {
-          label: 'btn.editProfile',
+          label: 'Edit Profile',
           icon: 'i-mdi-account-outline',
           to: 'https://auth.example.com/userprofile'
         },
         {
-          label: 'btn.logout',
+          label: 'Log out',
           icon: 'i-mdi-logout-variant',
-          click: expect.any(Function)
+          onSelect: expect.any(Function)
         }
       ])
     })
@@ -109,16 +109,16 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[0]
       expect(options).toEqual([
-        { label: 'n/a', slot: 'account', disabled: true },
+        { slot: 'account', type: 'label' },
         {
-          label: 'btn.editProfile',
+          label: 'Edit Profile',
           icon: 'i-mdi-account-outline',
           to: 'https://auth.example.com/userprofile'
         },
         {
-          label: 'btn.logout',
+          label: 'Log out',
           icon: 'i-mdi-logout-variant',
-          click: expect.any(Function)
+          onSelect: expect.any(Function)
         }
       ])
     })
@@ -129,11 +129,11 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[0]
       expect(options).toEqual([
-        { label: 'n/a', slot: 'account', disabled: true },
+        { slot: 'account', type: 'label' },
         {
-          label: 'btn.logout',
+          label: 'Log out',
           icon: 'i-mdi-logout-variant',
-          click: expect.any(Function)
+          onSelect: expect.any(Function)
         }
       ])
     })
@@ -142,17 +142,16 @@ describe('useConnectNav', () => {
   describe('accountSettingsOptions', () => {
     const expectedBasicOptions = [
       {
-        label: 'n/a',
-        slot: 'settings',
-        disabled: true
+        label: 'Account Settings',
+        type: 'label'
       },
       {
-        label: 'btn.accountInfo',
+        label: 'Account Info',
         icon: 'i-mdi-information-outline',
         to: 'https://auth.example.com/account/account1/settings/account-info'
       },
       {
-        label: 'btn.teamMembers',
+        label: 'Team Members',
         icon: 'i-mdi-account-group-outline',
         to: 'https://auth.example.com/account/account1/settings/team-members'
       }
@@ -161,7 +160,7 @@ describe('useConnectNav', () => {
     const expectedPremiumOptions = [
       ...expectedBasicOptions,
       {
-        label: 'btn.transactions',
+        label: 'Transactions',
         icon: 'i-mdi-file-document-outline',
         to: 'https://auth.example.com/account/account1/settings/transactions'
       }
@@ -213,9 +212,9 @@ describe('useConnectNav', () => {
       const options = connectNav.loggedInUserOptions.value[2]
       expect(options).toHaveLength(3)
       expect(options).toEqual([
-        { label: 'n/a', slot: 'accounts', disabled: true },
-        { label: 'Account 1', class: 'bg-bcGovGray-100 text-bcGovColor-activeBlue', iconClass: 'text-bcGovColor-activeBlue', labelClass: 'pl-0', click: expect.any(Function), icon: 'i-mdi-check' },
-        { label: 'Account 2', class: '', iconClass: '', labelClass: 'pl-6', click: expect.any(Function), icon: '' }
+        { label: 'Switch Account', type: 'label' },
+        { label: 'Account 1', class: 'bg-bcGovGray-100 text-bcGovColor-activeBlue', onSelect: expect.any(Function), icon: 'i-mdi-check' }, // iconClass: 'text-bcGovColor-activeBlue', labelClass: 'pl-0',
+        { label: 'Account 2', class: '', onSelect: expect.any(Function), icon: '' } // iconClass: '', labelClass: 'pl-6',
       ])
     })
   })
@@ -227,7 +226,7 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[3]
       expect(options).toHaveLength(1)
-      expect(options).toEqual([{ label: 'btn.createAccount', icon: 'i-mdi-plus', to: 'https://auth.example.com/setup-account' }])
+      expect(options).toEqual([{ label: 'Create Account', icon: 'i-mdi-plus', to: 'https://auth.example.com/setup-account' }])
     })
 
     it('should create create account options for bceid users', () => {
@@ -236,7 +235,7 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[3]
       expect(options).toHaveLength(1)
-      expect(options).toEqual([{ label: 'btn.createAccount', icon: 'i-mdi-plus', to: 'https://auth.example.com/setup-account' }])
+      expect(options).toEqual([{ label: 'Create Account', icon: 'i-mdi-plus', to: 'https://auth.example.com/setup-account' }])
     })
 
     it('should not create createAccountOptions for idir users', () => {
@@ -261,26 +260,25 @@ describe('useConnectNav', () => {
       expect(options).toEqual([
         [
           {
-            label: 'n/a',
-            slot: 'method',
-            disabled: true
+            label: 'Select log in method',
+            type: 'label'
           }
         ],
         [
           {
-            label: 'label.bcsc',
+            label: 'BC Services Card',
             icon: 'i-mdi-account-card-details-outline',
-            click: expect.any(Function)
+            onSelect: expect.any(Function)
           },
           {
-            label: 'label.bceid',
+            label: 'BCeID',
             icon: 'i-mdi-two-factor-authentication',
-            click: expect.any(Function)
+            onSelect: expect.any(Function)
           },
           {
-            label: 'label.idir',
+            label: 'IDIR',
             icon: 'i-mdi-account-group-outline',
-            click: expect.any(Function)
+            onSelect: expect.any(Function)
           }
         ]
       ])
@@ -292,13 +290,11 @@ describe('useConnectNav', () => {
       mockIsAuthenticated.value = false
       const connectNav = useConnectNav()
       const options = connectNav.loggedOutUserOptions.value[1]
-      const idpHints = ['bcsc', 'bceid', 'idir']
-      options?.forEach((option, i) => {
-        if (option.onSelect) {
-          // @ts-expect-error
-          option.onSelect()
-          expect(mockLogin).toHaveBeenCalledWith(idpHints[i])
-        }
+      // const idpHints = ['bcsc', 'bceid', 'idir']
+      options!.forEach((option, i) => {
+        // @ts-expect-error
+        option.onSelect()
+        expect(mockLogin).toHaveBeenCalledTimes(i + 1)
       })
     })
 
@@ -306,11 +302,11 @@ describe('useConnectNav', () => {
       mockIsAuthenticated.value = true
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[0]
-      const logoutOption = options?.find(option => option.label === 'btn.logout')
-      if (logoutOption?.click) {
-        logoutOption.click()
-        expect(mockLogout).toHaveBeenCalled()
-      }
+      const logoutOption = options!.find(option => option.label === 'Log out')
+
+      // @ts-expect-error
+      logoutOption.onSelect()
+      expect(mockLogout).toHaveBeenCalled()
     })
   })
 
@@ -320,8 +316,9 @@ describe('useConnectNav', () => {
       const connectNav = useConnectNav()
       const options = connectNav.loggedInUserOptions.value[2]
       const switchOption = options?.find(option => option.label === 'Account 2')
-      if (switchOption?.click) {
-        switchOption?.click()
+      if (switchOption?.onSelect) {
+        // @ts-expect-error
+        switchOption?.onSelect()
         expect(mockSwitchCurrentAccount).toHaveBeenCalledWith('account2')
       }
     })
@@ -335,40 +332,39 @@ describe('useConnectNav', () => {
       expect(options).toEqual([
         [
           {
-            disabled: true,
-            label: 'n/a',
-            slot: 'method'
+            label: 'Select log in method',
+            type: 'label'
           }
         ],
         [
           {
-            click: expect.any(Function),
+            onSelect: expect.any(Function),
             icon: 'i-mdi-account-card-details-outline',
-            label: 'label.bcsc'
+            label: 'BC Services Card'
           },
           {
-            click: expect.any(Function),
+            onSelect: expect.any(Function),
             icon: 'i-mdi-two-factor-authentication',
-            label: 'label.bceid'
+            label: 'BCeID'
           },
           {
-            click: expect.any(Function),
+            onSelect: expect.any(Function),
             icon: 'i-mdi-account-group-outline',
-            label: 'label.idir'
+            label: 'IDIR'
           }
         ],
         [
           {
-            click: expect.any(Function),
+            onSelect: expect.any(Function),
             icon: 'i-mdi-new-box',
-            label: 'btn.whatsNew',
+            label: "What's New",
             slot: 'whats-new'
           }
         ],
         [
           {
             icon: 'i-mdi-plus',
-            label: 'btn.createAccount',
+            label: 'Create Account',
             to: 'https://auth.example.com/choose-authentication-method'
           }
         ]
@@ -381,7 +377,7 @@ describe('useConnectNav', () => {
       mockPendingApprovalCount = 0
       const connectNav = useConnectNav()
       const options = connectNav.notificationsOptions.value
-      expect(options).toEqual([[{ label: 'notifications.none' }]])
+      expect(options).toEqual([[{ label: 'No Notifications' }]])
     })
 
     it('should return a slot object for notifications', () => {

@@ -3,7 +3,7 @@ import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { ConnectHeaderWhatsNew } from '#components'
 import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
-// TODO: add tests when whats new is implemented
+// TODO: figure out how to test reka overlay components (components use teleport to display so they are separate from the trigger element)
 describe('<ConnectHeaderWhatsNew />', () => {
   it('renders', async () => {
     const wrapper = await mountSuspended(ConnectHeaderWhatsNew, {

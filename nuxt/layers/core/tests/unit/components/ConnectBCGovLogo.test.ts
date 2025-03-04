@@ -27,6 +27,7 @@ describe('<ConnectBCGovLogo />', () => {
   })
 
   it('displays French logo when locale is fr-CA', async () => {
+    i18nMock.global.locale.value = 'fr-CA'
     const wrapper = await mountSuspended(ConnectBCGovLogo, {
       global: {
         plugins: [i18nMock]
@@ -50,6 +51,8 @@ describe('<ConnectBCGovLogo />', () => {
   })
 
   it('fallsback to English logo when locale is not fr-CA or en-CA', async () => {
+    // @ts-expect-error - i18n knows we dont have a 'ja' locale configured
+    i18nMock.global.locale.value = 'ja'
     const wrapper = await mountSuspended(ConnectBCGovLogo, {
       global: {
         plugins: [i18nMock]

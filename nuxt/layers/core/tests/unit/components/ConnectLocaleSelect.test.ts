@@ -16,14 +16,14 @@ mockNuxtImport('useI18n', () => {
         {
           name: 'English',
           code: 'en-CA',
-          iso: 'en-CA',
+          language: 'en-CA',
           dir: 'ltr',
           file: 'en-CA.ts'
         },
         {
           name: 'French',
           code: 'fr-CA',
-          iso: 'fr-CA',
+          language: 'fr-CA',
           dir: 'ltr',
           file: 'fr-CA.ts'
         }
@@ -97,8 +97,8 @@ describe('<ConnectLocaleSelect />', () => {
 
     const expectedItems = [
       [
-        { label: 'English', icon: '', class: '', iconClass: '', onSelect: expect.any(Function) },
-        { label: 'French', icon: '', class: '', iconClass: '', onSelect: expect.any(Function) }
+        { label: 'English', icon: '', class: '', onSelect: expect.any(Function) },
+        { label: 'French', icon: '', class: '', onSelect: expect.any(Function) }
       ]
     ]
 
