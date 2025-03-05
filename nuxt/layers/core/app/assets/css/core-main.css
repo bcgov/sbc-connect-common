@@ -220,7 +220,12 @@ body {
     @apply text-gray-900 text-sm;
   }
 
+  /* floating labels */
   .floating-label-input {
     @apply pointer-events-none absolute left-0 top-1 text-bcGovGray-900 text-xs font-medium px-2.5 transition-all peer-focus:top-1 peer-focus:text-xs peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:translate-none peer-focus:text-blue-500;
+  }
+  
+  .floating-label-textarea {
+    @apply pointer-events-none absolute left-0 top-1 text-bcGovGray-900 text-xs font-medium px-2.5 transition-all peer-focus:top-1 peer-focus:text-xs peer-placeholder-shown:text-sm peer-placeholder-shown:top-2.5 peer-focus:translate-none peer-focus:text-blue-500;
   }
 }
