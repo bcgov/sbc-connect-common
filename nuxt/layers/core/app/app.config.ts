@@ -9,7 +9,7 @@ export default defineAppConfig({
         options: { // display/hide items
           localeSelect: true,
           unauthenticated: {
-            whatsNew: false,
+            whatsNew: true,
             loginMenu: true,
             createAccount: true
           },
@@ -36,14 +36,52 @@ export default defineAppConfig({
   // https://ui3.nuxt.dev/getting-started/theme#design-system
   ui: {
     colors: {
-      primary: "blue",
-      neutral: "gray"
+      primary: 'blue',
+      neutral: 'gray'
+    },
+    breadcrumb: {
+      slots: {
+        separatorIcon: 'text-white'
+      },
+      variants: {
+        active: {
+          true: {
+            link: 'text-white underline font-medium'
+          },
+          false: {
+            link: 'text-white font-medium'
+          }
+        }
+      },
+      compoundVariants: [
+        {
+          disabled: false,
+          active: false,
+          to: true,
+          class: {
+            link: 'hover:text-white hover:underline transition-colors'
+          }
+        }
+      ]
     },
     button: {
       variants: {
         color: {
           white: 'text-white text-sm tracking-wide dark:text-white hover:bg-white/[0.1] focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300 ease-in-out'
+        },
+        size: {
+          bcGov: {
+            base: 'px-7 py-3 text-sm gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          }
         }
+      }
+    },
+    card: {
+      slots: {
+        root: 'rounded-sm'
       }
     },
     dropdownMenu: {
@@ -70,7 +108,7 @@ export default defineAppConfig({
           },
           false: {
             item: 'text-(--ui-text) data-highlighted:text-bcGovColor-activeBlue data-[state=open]:text-(--ui-text-highlighted) data-highlighted:before:bg-bcGovGray-100 data-[state=open]:before:bg-(--ui-bg-elevated)/50 transition-colors before:transition-colors',
-            itemLeadingIcon: 'text-bcGovGray-700 group-data-highlighted:text-bcGovColor-activeBlue group-data-[state=open]:text-(--ui-text) transition-colors',
+            itemLeadingIcon: 'text-bcGovGray-700 group-data-highlighted:text-bcGovColor-activeBlue group-data-[state=open]:text-(--ui-text) transition-colors'
           }
         },
         size: {
@@ -103,10 +141,24 @@ export default defineAppConfig({
           }
         }
       ]
+    },
+    modal: {
+      variants: {
+        fullscreen: {
+          false: {
+            content: 'rounded-sm'
+          }
+        }
+      }
+    },
+    tooltip: {
+      slots: {
+        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white',
+        arrow: 'fill-gray-700'
+      }
     }
   }
 })
-
 
 // export default defineAppConfig({
 //   connect: {

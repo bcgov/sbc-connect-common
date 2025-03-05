@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { headerOptionsSymbol } from '~/utils/connect-injection-keys'
-
 const { isAuthenticated } = useKeycloak()
-const headerOptions = useAppConfig().connect.core.header.options
-
-// using provide to set up for easier prop-drilling in future
-provide(headerOptionsSymbol, headerOptions)
+const ac = useAppConfig().connect.core.header.options
 </script>
 <template>
   <ConnectHeaderWrapper>
@@ -15,7 +10,7 @@ provide(headerOptionsSymbol, headerOptions)
         <div class="flex gap-1">
           <ConnectHeaderAuthenticatedOptions v-if="isAuthenticated" />
           <ConnectHeaderUnauthenticatedOptions v-else />
-          <ConnectLocaleSelect v-if="headerOptions.localeSelect" />
+          <ConnectLocaleSelect v-if="ac.localeSelect" />
         </div>
       </ClientOnly>
     </div>

@@ -1,21 +1,22 @@
 <script setup lang="ts">
-const i18nHead = useLocaleHead({
-  addDirAttribute: true,
-  addSeoAttributes: true
-})
+const { localeProperties } = useI18n()
 
-// set lang and dir attributes on head
 useHead({
   htmlAttrs: {
-    lang: () => i18nHead.value.htmlAttrs!.lang,
-    dir: () => i18nHead.value.htmlAttrs!.dir
+    lang: () => localeProperties.value.code,
+    dir: () => localeProperties.value.dir
   }
+})
+
+onMounted(async () => {
+  await useConnectWhatsNewStore().initWhatsNew()
 })
 </script>
 <template>
-  <NuxtLayout>
-    <UApp>
+  <!-- TODO: add locale prop to UApp -->
+  <UApp>
+    <NuxtLayout>
       <NuxtPage />
-    </UApp>
-  </NuxtLayout>
+    </NuxtLayout>
+  </UApp>
 </template>

@@ -1,9 +1,6 @@
 export default {
   btn: {
-    appVersion: {
-      show: 'Show App Version',
-      hide: 'Hide App Version'
-    },
+    appVersion: 'App Version',
     bcRegHome: 'BC Registries Home',
     createAccount: 'Create Account',
     editProfile: 'Edit Profile',

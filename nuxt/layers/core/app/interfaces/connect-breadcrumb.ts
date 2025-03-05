@@ -1,5 +1,5 @@
-import type { BreadcrumbLink } from '#ui/types'
+import type { BreadcrumbItem } from '#ui/types'
 
-export interface ConnectBreadcrumb extends BreadcrumbLink {
+export interface ConnectBreadcrumb extends BreadcrumbItem {
   appendAccountId?: boolean
 }

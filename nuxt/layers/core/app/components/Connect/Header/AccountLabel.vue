@@ -8,14 +8,10 @@ defineProps({
 <template>
   <div class="flex items-center gap-1">
     <UAvatar
-      :alt="username[0] ? username[0].toLocaleUpperCase($i18n.locale) : 'U'"
-      size="sm"
-      :ui="{
-        background: 'bg-blue-300 dark:bg-[#E0E7ED]',
-        text: 'font-semibold leading-none text-white dark:text-bcGovColor-darkGray truncate',
-        placeholder: 'font-semibold leading-none text-white truncate dark:text-bcGovColor-darkGray text-xl',
-        rounded: 'rounded-none'
-      }"
+      :text="username[0] ? username[0].toLocaleUpperCase($i18n.locale) : 'U'"
+      size="md"
+      class="text-white"
+      :ui="{ root: 'bg-blue-300 rounded-none text-lg', fallback: 'text-white font-bold' }"
     />
     <div class="mx-2 flex flex-col text-left font-normal tracking-wide">
       <span

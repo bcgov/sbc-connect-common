@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type { HeaderOptions } from '~/types/core-app-config'
-import { headerOptionsSymbol } from '~/utils/connect-injection-keys'
-
-const config = inject<HeaderOptions>(headerOptionsSymbol)
+const ac = useAppConfig().connect.core.header.options.unauthenticated
 </script>
 <template>
   <div
@@ -11,10 +8,10 @@ const config = inject<HeaderOptions>(headerOptionsSymbol)
   >
     <!-- TODO: implement whats new -->
     <!-- whats new slideover -->
-    <ConnectHeaderWhatsNew v-if="config?.unauthenticated.whatsNew" class="hidden lg:flex" />
+    <ConnectHeaderWhatsNew v-if="ac.whatsNew" class="hidden lg:flex" />
     <!-- login options dropdown or main menu on small screens -->
-    <ConnectHeaderLoginOptionsDropdown v-if="config?.unauthenticated.loginMenu" />
+    <ConnectHeaderLoginOptionsDropdown v-if="ac.loginMenu" />
     <!-- create account button, hidden on small screens -->
-    <ConnectHeaderCreateAccountBtn v-if="config?.unauthenticated.createAccount" class="hidden lg:flex" />
+    <ConnectHeaderCreateAccountBtn v-if="ac.createAccount" class="hidden lg:flex" />
   </div>
 </template>

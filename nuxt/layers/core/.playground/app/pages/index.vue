@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { useTestStore } from '~/stores/test-store';
 import { manageAccountChange } from '../utils/manageAccountChange';
+import type { ButtonProps } from '@nuxt/ui';
 
 const connectNav = useConnectNav()
 const localePath = useLocalePath()
 const { isAuthenticated, login, logout } = useKeycloak()
 const ldStore = useConnectLaunchdarklyStore()
 
-const actions = [
+const actions: ButtonProps[] = [
   {
     label: 'test 1',
     variant: 'outline',
-    click: () => console.log('clicked 1')
+    onClick: () => console.log('clicked 1')
   },
   {
     label: 'test 2',
@@ -33,12 +34,6 @@ definePageMeta({
   // onBeforeSessionExpired: async () => await asyncFunction() // do something before session is expired using the default functionality
 })
 
-setBreadcrumbs([
-  { label: 'test', to: useRuntimeConfig().public.registryHomeURL, appendAccountId: true },
-  { label: 'test 2', to: useRuntimeConfig().public.registryHomeURL },
-  { label: 'test 3' }
-])
-
 onMounted(async () => {
   // const test = ldStore.getStoredFlag('allowable-business-passcode-types')
   // console.log('test: ', test)
@@ -55,6 +50,12 @@ onMounted(async () => {
     console.error('pay api error: ', e)
   }
   
+
+  setBreadcrumbs([
+    { label: 'test', to: useRuntimeConfig().public.registryHomeURL, appendAccountId: true },
+    { label: 'test 2', to: useRuntimeConfig().public.registryHomeURL },
+    { label: 'test 3' }
+  ])
 })
 </script>
 <template>
@@ -62,6 +63,8 @@ onMounted(async () => {
     <h1>
       Testing
     </h1>
+
+    <ConnectSpinner />
 
     <UButton label="test 2 page" :to="localePath('/test-2')" />
 
@@ -72,7 +75,7 @@ onMounted(async () => {
     </ClientOnly>
 
     <ConnectPageSection
-      :heading="{ label: 'Hello World', icon: 'i-mdi-account-multiple', bgColor: 'bg-red-200' }"
+      :heading="{ label: 'Hello World', icon: 'i-mdi-account-multiple', ui: 'rounded-t-sm bg-red-200' }"
       :actions="actions"
     >
       some stuff

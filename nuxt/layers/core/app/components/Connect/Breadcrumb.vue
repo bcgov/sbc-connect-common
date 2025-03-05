@@ -36,32 +36,22 @@ function resolveBackHref () {
     v-if="$route.meta.hideBreadcrumbs !== true"
     class="bg-blue-350"
   >
-    <div class="mx-auto flex max-w-bcGovLg items-center divide-x divide-gray-300 px-4 py-2">
+    <div class="mx-auto flex max-w-bcGovLg items-center px-4 py-2 gap-3">
       <UButton
-        class="mr-3 mt-px size-[28px] rounded-full px-1 text-blue-500"
-        color="white"
+        class="size-[28px] rounded-full px-1 bg-white hover:bg-white/75"
         :disabled="breadcrumbs.length < 2"
+        color="white"
         icon="i-mdi-arrow-left"
         :aria-label="$t('ConnectBreadcrumb.backBtn')"
-        data-cy="crumb-back"
         :to="resolveBackHref()"
-      />
-      <UBreadcrumb
-        :links="breadcrumbs"
-        :aria-label="$t('ConnectBreadcrumb.arialabel')"
-        class="pl-3"
         :ui="{
-          li: 'flex items-center gap-x-1.5 text-xs text-white leading-6 min-w-0',
-          base: 'flex items-center gap-x-1.5 group font-normal min-w-0',
-          label: 'block truncate tracking-wide',
-          active: 'text-white',
-          inactive: 'text-white underline hover:text-white',
-          icon: {
-            base: 'flex-shrink-0 w-3 h-3 text-white',
-            active: '',
-            inactive: '',
-          },
+          leadingIcon: 'text-blue-500'
         }"
+      />
+      <div class="w-[1px] bg-gray-300 h-[24px]" />
+      <UBreadcrumb
+        :items="breadcrumbs"
+        :aria-label="$t('ConnectBreadcrumb.arialabel')"
       />
     </div>
   </div>

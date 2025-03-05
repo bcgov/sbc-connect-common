@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import type { HeaderOptions } from '~/types/core-app-config'
-import { headerOptionsSymbol } from '~/utils/connect-injection-keys'
-
-const config = inject<HeaderOptions>(headerOptionsSymbol)
+const ac = useAppConfig().connect.core.header.options.authenticated
 </script>
 <template>
   <div
@@ -10,8 +7,9 @@ const config = inject<HeaderOptions>(headerOptionsSymbol)
     class="flex gap-1"
   >
     <!-- notifications dropdown -->
-    <ConnectHeaderNotifications v-if="config?.authenticated.notifications" />
+    <ConnectHeaderNotifications v-if="ac.notifications" />
     <!-- account options dropdown -->
-    <ConnectHeaderAccountOptionsDropdown v-if="config?.authenticated.accountOptionsMenu" />
+    <ConnectHeaderAccountOptionsDropdown v-if="ac.accountOptionsMenu" />
+    <!-- <ConnectHeaderAccountOptionsDropdownV2 /> -->
   </div>
 </template>

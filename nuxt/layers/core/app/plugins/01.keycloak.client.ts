@@ -46,6 +46,7 @@ export default defineNuxtPlugin(async () => {
     }
   }
 
+  // TODO: prevent multiple modals from opening when a modal is already open
   // executed when user is authenticated and idle = true
   // if route meta provided, override default behaviour
   async function sessionExpired () {
@@ -71,7 +72,7 @@ export default defineNuxtPlugin(async () => {
       }, modalTimeout)
 
       // open modal and pass resetSessionTimeout as a callback to clear the timeout if the user closes the modal with click/keyboard event
-      useConnectModals().openSessionExpiringModal(resetSessionTimeout)
+      await useConnectModals().openSessionExpiringModal(resetSessionTimeout)
     }
   }
 

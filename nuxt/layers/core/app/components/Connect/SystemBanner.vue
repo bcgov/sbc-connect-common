@@ -17,25 +17,30 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UAlert
-    v-show="!!message && !close"
-    class="border-b-2 border-yellow-400 py-0"
-    color="yellow"
-    :description="message"
-    variant="solid"
-    :close-button="dismissible ? { class: 'pr-2 text-gray-900' } : null"
-    :ui="{ rounded: 'rounded-none', padding: 'p-0', gap: 'app-inner-container py-2' }"
-    @close="close = true"
-  >
-    <template #icon>
-      <!-- NB: needed due to icon sizing via app.config / ui config for alert is not getting applied -->
-      <UIcon class="ml-[-2px] text-[34px]" :name="icon" />
-    </template>
-    <template #description>
-      <!-- eslint-disable vue/no-v-html tailwindcss/no-custom-classname -->
-      <p class="vhtml text-gray-900" v-html="message" />
-    </template>
-  </UAlert>
+  <div class="bg-yellow-400">
+    <UAlert
+      v-show="!!message && !close"
+      class="border-b-2 border-yellow-400 py-0"
+      :description="message"
+      :close="dismissible"
+      close-icon="i-mdi-close"
+      :ui="{
+        root: 'rounded-none bg-yellow-400 p-0 app-inner-container',
+        wrapper: 'bg-yellow-400',
+        close: 'mt-2 text-gray-900'
+      }"
+      @update:open="close = true"
+    >
+      <!-- dismissible ? { class: 'pr-2 text-gray-900' } : null -->
+      <template #description>
+        <div class="flex gap-2 items-center py-2">
+          <UIcon class="size-7 shrink-0 text-gray-900 self-start" :name="icon" />
+          <!-- eslint-disable vue/no-v-html tailwindcss/no-custom-classname -->
+          <p class="vhtml text-gray-900" v-html="message" />
+        </div>
+      </template>
+    </UAlert>
+  </div>
 </template>
 <!-- must style globally for vhtml style to work  -->
 <style>

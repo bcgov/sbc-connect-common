@@ -1,4 +1,5 @@
-import type { DropdownItem } from '#ui/types'
+import type { DropdownMenuItem } from '@nuxt/ui'
+import { useConnectWhatsNewStore } from '~/stores/connect-whats-new'
 
 // handle navigation items and functionality
 export function useConnectNav () {
@@ -12,6 +13,7 @@ export function useConnectNav () {
   const locale = useNuxtApp().$i18n.locale.value
   const { login, logout, isAuthenticated, kcUser } = useKeycloak()
   const accountStore = useConnectAccountStore()
+  const whatsNewStore = useConnectWhatsNewStore()
 
   /** return the correct account creation link based on auth state */
   function createAccountUrl (): string {
@@ -22,14 +24,8 @@ export function useConnectNav () {
     }
   }
 
-  const basicAccountOptions = computed<DropdownItem[]>(() => {
-    const options: DropdownItem[] = [
-      {
-        label: 'n/a',
-        slot: 'account',
-        disabled: true
-      }
-    ]
+  const basicAccountOptions = computed<DropdownMenuItem[]>(() => {
+    const options: DropdownMenuItem[] = [{ slot: 'account', type: 'label' }]
     if ([LoginSource.BCEID, LoginSource.BCSC].includes(kcUser?.value.loginSource)) {
       options.push({
         label: t('btn.editProfile'),
@@ -40,17 +36,16 @@ export function useConnectNav () {
     options.push({
       label: t('btn.logout'),
       icon: 'i-mdi-logout-variant',
-      click: () => logout() // localePath(config.public.appBaseUrl) ?
+      onSelect: () => logout() // localePath(config.public.appBaseUrl) ?
     })
     return options
   })
 
-  const accountSettingsOptions = computed<DropdownItem[]>(() => {
-    const options: DropdownItem[] = [
+  const accountSettingsOptions = computed<DropdownMenuItem[]>(() => {
+    const options: DropdownMenuItem[] = [
       {
-        label: 'n/a',
-        slot: 'settings',
-        disabled: true
+        label: t('label.accountSettings'),
+        type: 'label'
       },
       {
         label: t('btn.accountInfo'),
@@ -73,17 +68,17 @@ export function useConnectNav () {
     return options
   })
 
-  const switchAccountOptions = computed<DropdownItem[]>(() => {
-    const options: DropdownItem[] = []
+  const switchAccountOptions = computed<DropdownMenuItem[]>(() => {
+    const options: DropdownMenuItem[] = []
 
     if (accountStore.userAccounts.length > 1) {
-      options.push({ label: 'n/a', slot: 'accounts', disabled: true })
+      options.push({ label: t('label.switchAccount'), type: 'label' })
 
       accountStore.userAccounts.forEach((account) => {
         const isActive = accountStore.currentAccount.id === account.id
         options.push({
           label: account.label,
-          click: () => {
+          onSelect: () => {
             if (!isActive && account.id) {
               if (route.meta.onAccountChange) {
                 const allowAccountChange = route.meta.onAccountChange(accountStore.currentAccount, account)
@@ -96,9 +91,9 @@ export function useConnectNav () {
             }
           },
           icon: isActive ? 'i-mdi-check' : '',
-          class: isActive ? 'bg-bcGovGray-100 text-bcGovColor-activeBlue' : '',
-          labelClass: isActive ? 'pl-0' : 'pl-6',
-          iconClass: isActive ? 'text-bcGovColor-activeBlue' : ''
+          class: isActive ? 'bg-bcGovGray-100 text-bcGovColor-activeBlue' : ''
+          // labelClass: isActive ? 'pl-0' : 'pl-6', // TODO: implement ??
+          // iconClass: isActive ? 'text-bcGovColor-activeBlue' : ''
         })
       })
     }
@@ -106,15 +101,15 @@ export function useConnectNav () {
     return options
   })
 
-  const createAccountOptions = computed<DropdownItem[]>(() => {
+  const createAccountOptions = computed<DropdownMenuItem[]>(() => {
     if ([LoginSource.BCROS, LoginSource.IDIR].includes(kcUser?.value.loginSource)) {
       return []
     }
     return [{ label: t('btn.createAccount'), icon: 'i-mdi-plus', to: createAccountUrl() }]
   })
 
-  const loggedInUserOptions = computed<DropdownItem[][]>(() => {
-    const options: DropdownItem[][] = [
+  const loggedInUserOptions = computed<DropdownMenuItem[][]>(() => {
+    const options = [
       basicAccountOptions.value,
       accountSettingsOptions.value
     ]
@@ -134,34 +129,26 @@ export function useConnectNav () {
     ? appBaseUrl + locale + layerConfig.login.redirectPath
     : undefined
 
-  const loginOptionsMap: Record<'bcsc' | 'bceid' | 'idir', { label: string; icon: string; click: () => Promise<void> }> = {
+  const loginOptionsMap: Record<'bcsc' | 'bceid' | 'idir', { label: string; icon: string; onSelect: () => Promise<void> }> = {
     bcsc: {
       label: t('label.bcsc'),
       icon: 'i-mdi-account-card-details-outline',
-      click: () => login(IdpHint.BCSC, loginRedirectUrl)
+      onSelect: () => login(IdpHint.BCSC, loginRedirectUrl)
     },
     bceid: {
       label: t('label.bceid'),
       icon: 'i-mdi-two-factor-authentication',
-      click: () => login(IdpHint.BCEID, loginRedirectUrl)
+      onSelect: () => login(IdpHint.BCEID, loginRedirectUrl)
     },
     idir: {
       label: t('label.idir'),
       icon: 'i-mdi-account-group-outline',
-      click: () => login(IdpHint.IDIR, loginRedirectUrl)
+      onSelect: () => login(IdpHint.IDIR, loginRedirectUrl)
     }
   }
 
-  const loggedOutUserOptions = computed<DropdownItem[][]>(() => {
-    const options: DropdownItem[][] = [
-      [
-        {
-          label: 'n/a',
-          slot: 'method',
-          disabled: true
-        }
-      ]
-    ]
+  const loggedOutUserOptions = computed<DropdownMenuItem[][]>(() => {
+    const options: DropdownMenuItem[][] = [[{ label: t('label.selectLoginMethod'), type: 'label' }]]
 
     const idps = layerConfig.login.idps.map(key => loginOptionsMap[key])
 
@@ -170,25 +157,26 @@ export function useConnectNav () {
     return options
   })
 
-  const loggedOutUserOptionsMobile = computed<DropdownItem[][]>(() => {
-    const options: DropdownItem[][] = []
+  const loggedOutUserOptionsMobile = computed<DropdownMenuItem[][]>(() => {
+    const config = layerConfig.header.options.unauthenticated
+    const options: DropdownMenuItem[][] = []
 
-    if (layerConfig.header.options.unauthenticated.loginMenu) {
+    if (config.loginMenu) {
       options.push(...loggedOutUserOptions.value)
     }
-    if (layerConfig.header.options.unauthenticated.whatsNew) {
-      options.push([{ label: t('btn.whatsNew'), slot: 'whats-new', icon: 'i-mdi-new-box', click: () => console.log('whats new clicked') }])
+    if (config.whatsNew) {
+      options.push([{ label: t('btn.whatsNew'), slot: 'whats-new', icon: 'i-mdi-new-box', onSelect: async () => await whatsNewStore.openWhatsNewSlideover() }])
     }
-    if (layerConfig.header.options.unauthenticated.createAccount) {
+    if (config.createAccount) {
       options.push([{ label: t('btn.createAccount'), icon: 'i-mdi-plus', to: createAccountUrl() }])
     }
 
     return options
   })
 
-  const notificationsOptions = computed<DropdownItem[][]>(() => {
+  const notificationsOptions = computed<DropdownMenuItem[][]>(() => {
     const count = accountStore.pendingApprovalCount
-    const options: DropdownItem[][] = []
+    const options = []
     if (count > 0) {
       options.push([{
         label: 'n/a',

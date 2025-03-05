@@ -1,9 +1,6 @@
 export default {
   btn: {
-    appVersion: {
-      show: "Afficher la version de l'application",
-      hide: "Masquer la version de l'application"
-    },
+    appVersion: "Version de l'Application",
     bcRegHome: 'Accueil des Registres de la CB',
     createAccount: 'Créer un Compte',
     editProfile: 'Editer le Profil',
