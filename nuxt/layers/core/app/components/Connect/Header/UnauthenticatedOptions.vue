@@ -6,7 +6,6 @@ const ac = useAppConfig().connect.core.header.options.unauthenticated
     id="connect-header-unauth-options"
     class="flex gap-1"
   >
-    <!-- TODO: implement whats new -->
     <!-- whats new slideover -->
     <ConnectHeaderWhatsNew v-if="ac.whatsNew" class="hidden lg:flex" />
     <!-- login options dropdown or main menu on small screens -->

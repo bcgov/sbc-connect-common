@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { ConnectBCGovLogo } from '#components'
-import { enI18n, frI18n, randomI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
 describe('<ConnectBCGovLogo />', () => {
   it('displays English logo when locale is en-CA', async () => {
     const wrapper = await mountSuspended(ConnectBCGovLogo, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -27,9 +27,10 @@ describe('<ConnectBCGovLogo />', () => {
   })
 
   it('displays French logo when locale is fr-CA', async () => {
+    i18nMock.global.locale.value = 'fr-CA'
     const wrapper = await mountSuspended(ConnectBCGovLogo, {
       global: {
-        plugins: [frI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -50,9 +51,11 @@ describe('<ConnectBCGovLogo />', () => {
   })
 
   it('fallsback to English logo when locale is not fr-CA or en-CA', async () => {
+    // @ts-expect-error - i18n knows we dont have a 'ja' locale configured
+    i18nMock.global.locale.value = 'ja'
     const wrapper = await mountSuspended(ConnectBCGovLogo, {
       global: {
-        plugins: [randomI18n]
+        plugins: [i18nMock]
       }
     })
 

@@ -2,6 +2,7 @@ import { type ApiError, ErrorCategory } from '#imports'
 /** Manages connect account data */
 export const useConnectAccountStore = defineStore('nuxt-core-connect-account-store', () => {
   const { $authApi, $keycloak } = useNuxtApp()
+  const rtc = useRuntimeConfig().public
   const { kcUser, isAuthenticated } = useKeycloak()
   // selected user account
   const currentAccount = ref<Account>({} as Account)
@@ -44,7 +45,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
    * @returns True if the given account ID matches the current account ID, false otherwise.
   */
   function isCurrentAccount (accountId: number): boolean {
-    return accountId === Number(currentAccount.value.id)
+    return accountId === currentAccount.value.id
   }
 
   /** Get user information from AUTH */
@@ -70,7 +71,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
   //   "verified": false
   // }
   async function getAuthUserProfile (identifier: string) {
-    const authApiURL = useRuntimeConfig().public.authApiURL
+    const authApiURL = rtc.authApiURL
     try {
       await updateAuthUserInfo() // update user roles before fetching user info
       const response = await fetch(`${authApiURL}/users/${identifier}`, { // native fetch doesnt break app
@@ -127,6 +128,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
   /** Get the user's account list */
   async function getUserAccounts (keycloakGuid: string): Promise<Account[] | undefined> {
     try {
+      // TODO: use orgs fetch instead to get branch name ? $authApi<UserSettings[]>('/users/orgs')
       const response = await $authApi<UserSettings[]>(`/users/${keycloakGuid}/settings`, {
         onResponseError ({ response }) {
           errors.value.push({
@@ -163,7 +165,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
   }
 
   /** Switch the current account to the given account ID if it exists in the user's account list */
-  function switchCurrentAccount (accountId: string) {
+  function switchCurrentAccount (accountId: number) {
     const account = userAccounts.value.find(account => account.id === accountId)
     if (account) {
       currentAccount.value = account
@@ -199,9 +201,9 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
       const isAllowedPath = ['return-cc-payment', 'signout'].includes(endPath)
       if (!isAllowedPath) {
         // URL not allowed so redirect
-        const redirectUrl = `${useRuntimeConfig().public.authWebURL}/account-freeze`
+        const redirectUrl = `${rtc.authWebURL}/account-freeze`
         // TODO: should probably change this to check 'appName' when auth starts using the core layer
-        const external = useRuntimeConfig().public.authWebURL !== useRuntimeConfig().public.baseUrl
+        const external = rtc.authWebURL !== rtc.baseUrl
         await navigateTo(redirectUrl, { external })
       }
     } else if (currentAccount.value?.accountStatus === AccountStatus.PENDING_STAFF_REVIEW) {
@@ -215,11 +217,20 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
         // const accountNameEncoded = encodeURIComponent(btoa(currentAccount.value?.id))
         // Temporary: remove spaces and it shows something legible at least
         const accountNameEncoded = currentAccount.value?.label?.replaceAll(' ', '')
-        const redirectUrl = `${useRuntimeConfig().public.authWebURL}/pendingapproval/${accountNameEncoded}/true`
+        const redirectUrl = `${rtc.authWebURL}/pendingapproval/${accountNameEncoded}/true`
         // TODO: should probably change this to check 'appName' when auth starts using the core layer
-        const external = useRuntimeConfig().public.authWebURL !== useRuntimeConfig().public.baseUrl
+        const external = rtc.authWebURL !== rtc.baseUrl
         await navigateTo(redirectUrl, { external })
       }
+    }
+  }
+
+  async function initAccountStore (): Promise<void> {
+    await setAccountInfo() // load user accounts
+    await setUserName() // set local name refs from auth api fetch result
+    await checkAccountStatus() // redirect user if account status is nsf suspended/suspended/pending review
+    if (currentAccount.value.id && kcUser.value.keycloakGuid) { // check for pending approvals
+      await getPendingApprovalCount(currentAccount.value.id, kcUser.value.keycloakGuid)
     }
   }
 
@@ -249,6 +260,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
     getUserAccounts,
     switchCurrentAccount,
     getPendingApprovalCount,
+    initAccountStore,
     $reset
   }
 },

@@ -107,9 +107,9 @@ describe('Account Store Tests', () => {
   it('can switch the current account', () => {
     const accountStore = useConnectAccountStore()
     const accounts: Account[] = [
-      { type: UserSettingsType.ACCOUNT, id: '1', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 1', urlpath: '/account-1', urlorigin: 'https://example.com' },
-      { type: UserSettingsType.ACCOUNT, id: '2', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.INACTIVE, label: 'Account 2', urlpath: '/account-2', urlorigin: 'https://example.com' },
-      { type: UserSettingsType.ACCOUNT, id: '3', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 3', urlpath: '/account-3', urlorigin: 'https://example.com' }
+      { type: UserSettingsType.ACCOUNT, id: 1, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 1', urlpath: '/account-1', urlorigin: 'https://example.com' },
+      { type: UserSettingsType.ACCOUNT, id: 2, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.INACTIVE, label: 'Account 2', urlpath: '/account-2', urlorigin: 'https://example.com' },
+      { type: UserSettingsType.ACCOUNT, id: 3, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 3', urlpath: '/account-3', urlorigin: 'https://example.com' }
     ]
 
     accountStore.userAccounts = accounts
@@ -122,9 +122,9 @@ describe('Account Store Tests', () => {
   it('can reset the store back to default values', () => {
     const accountStore = useConnectAccountStore()
     const accounts: Account[] = [
-      { type: UserSettingsType.ACCOUNT, id: '1', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 1', urlpath: '/account-1', urlorigin: 'https://example.com' },
-      { type: UserSettingsType.ACCOUNT, id: '2', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.INACTIVE, label: 'Account 2', urlpath: '/account-2', urlorigin: 'https://example.com' },
-      { type: UserSettingsType.ACCOUNT, id: '3', accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 3', urlpath: '/account-3', urlorigin: 'https://example.com' }
+      { type: UserSettingsType.ACCOUNT, id: 1, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 1', urlpath: '/account-1', urlorigin: 'https://example.com' },
+      { type: UserSettingsType.ACCOUNT, id: 2, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.INACTIVE, label: 'Account 2', urlpath: '/account-2', urlorigin: 'https://example.com' },
+      { type: UserSettingsType.ACCOUNT, id: 3, accountType: AccountType.PREMIUM, accountStatus: AccountStatus.ACTIVE, label: 'Account 3', urlpath: '/account-3', urlorigin: 'https://example.com' }
     ]
 
     accountStore.userAccounts = accounts

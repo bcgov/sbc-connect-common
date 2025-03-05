@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify'
-import type { DOMPurifyI } from 'dompurify'
+import type { DOMPurify as DOMPurifyI } from 'dompurify'
 
 export default defineNuxtPlugin({
   name: 'core-dompurify-plugin',

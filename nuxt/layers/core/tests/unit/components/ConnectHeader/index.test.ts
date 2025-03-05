@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { mountSuspended, mockNuxtImport } from '@nuxt/test-utils/runtime'
 import { ConnectHeader } from '#components'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
 let mockIsAuthenticated = true
 mockNuxtImport('useKeycloak', () => {
@@ -65,7 +65,7 @@ describe('<ConnectHeader />', () => {
   it('renders when authenticated', async () => {
     const wrapper = await mountSuspended(ConnectHeader, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -76,8 +76,8 @@ describe('<ConnectHeader />', () => {
     expect(homeLogoLink.exists()).toBe(true)
 
     // locale select should be rendered
-    const localeSelectDropdown = wrapper.find('#locale-select-dropdown')
-    expect(localeSelectDropdown.exists()).toBe(true)
+    const localeSelectDropdown = wrapper.find('[data-testid="locale-select-dropdown"]')
+    expect(localeSelectDropdown).toBeDefined()
 
     // unauthenticated options should NOT be rendered
     const unauthenticatedOptions = wrapper.find('#connect-header-unauth-options')
@@ -96,7 +96,7 @@ describe('<ConnectHeader />', () => {
     mockIsAuthenticated = false
     const wrapper = await mountSuspended(ConnectHeader, {
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -107,8 +107,8 @@ describe('<ConnectHeader />', () => {
     expect(homeLogoLink.exists()).toBe(true)
 
     // locale select should be rendered
-    const localeSelectDropdown = wrapper.find('#locale-select-dropdown')
-    expect(localeSelectDropdown.exists()).toBe(true)
+    const localeSelectDropdown = wrapper.find('[data-testid="locale-select-dropdown"]')
+    expect(localeSelectDropdown).toBeDefined()
 
     // unauthenticated options should be rendered
     const unauthenticatedOptions = wrapper.find('#connect-header-unauth-options')

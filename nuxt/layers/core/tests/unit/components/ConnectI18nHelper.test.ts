@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { ConnectI18nHelper } from '#components'
-import { enI18n } from '~~/tests/unit/mocks/i18n'
+import { i18nMock } from '~~/tests/unit/mocks/i18n'
 
 describe('<ConnectI18nHelper />', () => {
   it('should add bold tags around text', async () => {
@@ -10,7 +10,7 @@ describe('<ConnectI18nHelper />', () => {
         translationPath: 'test.i18nBold.strong'
       },
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 
@@ -24,7 +24,7 @@ describe('<ConnectI18nHelper />', () => {
         prop: 'prop to be added'
       },
       global: {
-        plugins: [enI18n]
+        plugins: [i18nMock]
       }
     })
 

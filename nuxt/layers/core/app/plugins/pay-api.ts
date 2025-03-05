@@ -7,12 +7,13 @@ export default defineNuxtPlugin(() => {
   const api = $fetch.create({
     baseURL: payApiUrl,
     onRequest ({ options }) {
-      const headers = options.headers ||= {}
+      const headers = options.headers ||= {} as Headers
       if (Array.isArray(headers)) {
         headers.push(['Authorization', `Bearer ${$keycloak.token}`])
       } else if (headers instanceof Headers) {
         headers.set('Authorization', `Bearer ${$keycloak.token}`)
       } else {
+        // @ts-expect-error - 'Authorization' doesnt exist on type Headers
         headers.Authorization = `Bearer ${$keycloak.token}`
       }
     },
