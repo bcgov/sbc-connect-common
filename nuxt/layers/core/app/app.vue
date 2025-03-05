@@ -10,6 +10,11 @@ useHead({
 
 onMounted(async () => {
   await useConnectWhatsNewStore().initWhatsNew()
+
+  const { $authApi } = useNuxtApp()
+  const res = await $authApi<UserSettings[]>('/users/orgs')
+
+  console.log(res)
 })
 </script>
 <template>

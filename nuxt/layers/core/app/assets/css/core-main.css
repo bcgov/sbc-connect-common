@@ -14,6 +14,9 @@
   --marker-alpha: lower-alpha;
   --marker-upper-alpha: upper-alpha;
 
+  /* box shadow */
+  --shadow-bcGovInput: inset 0 -2px 0 0px #1669bb;
+
   /* COLOURS */
   /* these colours are as defined in styleguide: */
   /* https://preview.uxpin.com/73eb31e6346bc2863a066f02218a3af289325619#/pages/138840439/simulate/sitemap?mode=i */
@@ -215,5 +218,9 @@ body {
   td,
   th {
     @apply text-gray-900 text-sm;
+  }
+
+  .floating-label-input {
+    @apply pointer-events-none absolute left-0 top-1 text-bcGovGray-900 text-xs font-medium px-2.5 transition-all peer-focus:top-1 peer-focus:text-xs peer-placeholder-shown:text-sm peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-focus:translate-none peer-focus:text-blue-500;
   }
 }
