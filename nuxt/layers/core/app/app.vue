@@ -14,7 +14,9 @@ onMounted(async () => {
 </script>
 <template>
   <!-- TODO: add locale prop to UApp -->
-  <UApp>
+  <UApp
+    :toaster="{ position: 'bottom-center' }"
+  >
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

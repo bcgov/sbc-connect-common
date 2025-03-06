@@ -280,6 +280,15 @@ export default defineAppConfig({
         variant: 'bcGov'
       }
     },
+    toast: {
+      slots: {
+        root: 'bg-bcGovGray-700 rounded-sm ring-none',
+        title: 'text-white',
+        description: 'text-white',
+        progress: 'hidden',
+        close: 'hidden'
+      }
+    },
     tooltip: {
       slots: {
         content: 'bg-gray-700 rounded-sm ring-gray-700 text-white',
