@@ -74,25 +74,25 @@ export default defineAppConfig({
         },
         size: {
           sm: {
-            base: 'px-2.5 py-1.5 text-base gap-2.5',
+            base: 'px-7 py-0.5 text-base gap-2.5',
             leadingIcon: 'size-4',
             leadingAvatarSize: '3xs',
             trailingIcon: 'size-4'
           },
           md: {
-            base: 'px-2.5 py-1.5 text-base gap-2.5',
+            base: 'px-7 py-1.5 text-base gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
           },
           lg: {
-            base: 'px-3 py-2 text-base gap-2.5',
+            base: 'px-7 py-1.75 text-base gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
           },
           xl: {
-            base: 'px-7 py-3 text-base gap-2.5',
+            base: 'px-7 py-2.5 text-base gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'

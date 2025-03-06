@@ -36,7 +36,10 @@ const value = ref([])
     <h1>
       Testing 2 page
     </h1>
-    <UButton label="home page" :to="localePath('/')" />
+    <UButton icon="i-mdi-menu" label="home page" :to="localePath('/')" size="sm" />
+    <UButton label="home page" :to="localePath('/')" size="md" />
+    <UButton label="home page" :to="localePath('/')" size="lg" />
+    <UButton label="home page" :to="localePath('/')" size="xl" />
 
     <!-- input floating label example - must have empty placeholder - must use id/for or aria-label -->
      <h2>UInput</h2>
