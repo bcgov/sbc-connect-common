@@ -65,13 +65,34 @@ export default defineAppConfig({
       ]
     },
     button: {
+      slots: {
+        base: 'cursor-pointer'
+      },
       variants: {
         color: {
           white: 'text-white text-sm tracking-wide dark:text-white hover:bg-white/[0.1] focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300 ease-in-out'
         },
         size: {
-          bcGov: {
-            base: 'px-7 py-3 text-sm gap-2.5',
+          sm: {
+            base: 'px-2.5 py-1.5 text-base gap-2.5',
+            leadingIcon: 'size-4',
+            leadingAvatarSize: '3xs',
+            trailingIcon: 'size-4'
+          },
+          md: {
+            base: 'px-2.5 py-1.5 text-base gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          },
+          lg: {
+            base: 'px-3 py-2 text-base gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          },
+          xl: {
+            base: 'px-7 py-3 text-base gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
