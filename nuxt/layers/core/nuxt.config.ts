@@ -31,7 +31,8 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-lodash'
     // '@nuxt/test-utils/module'
   ],
 

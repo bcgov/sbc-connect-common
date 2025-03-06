@@ -142,6 +142,26 @@ export default defineAppConfig({
         }
       ]
     },
+    icons: {
+      arrowLeft: 'i-mdi-arrow-left',
+      arrowRight: 'i-mdi-arrow-right',
+      check: 'i-mdi-check',
+      chevronDoubleLeft: 'i-mdi-chevron-double-left',
+      chevronDoubleRight: 'i-mdi-chevron-double-right',
+      chevronDown: 'i-mdi-menu-down',
+      chevronLeft: 'i-mdi-menu-left',
+      chevronRight: 'i-mdi-menu-right',
+      chevronUp: 'i-mdi-menu-up',
+      close: 'i-mdi-close',
+      ellipsis: 'i-lucide-ellipsis',
+      external: 'i-mdi-open-in-new',
+      folder: 'i-mdi-folder',
+      folderOpen: 'i-mdi-folder-open',
+      loading: 'i-mdi-loading',
+      minus: 'i-mdi-minus',
+      plus: 'i-mdi-plus',
+      search: 'i-mdi-magnify'
+    },
     input: {
       variants: {
         size: {
@@ -171,6 +191,71 @@ export default defineAppConfig({
             content: 'rounded-sm'
           }
         }
+      }
+    },
+    select: {
+      slots: {
+        content: 'rounded-sm',
+        group: 'px-0 py-2',
+        trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200', //  group-data-[state=open]:text-blue-500 group-data-focus:text-blue-500 // TODO: icon colour when focused
+        item: 'my-0.75 text-bcGovGray-900 before:rounded-none data-highlighted:text-blue-500 data-highlighted:before:bg-blue-50 data-[state=checked]:text-blue-500',
+        itemLeadingIcon: 'group-data-[state=checked]:text-blue-500 group-data-highlighted:text-blue-500 text-bcGovGray-900'
+      },
+      variants: {
+        size: {
+          bcGov: {
+            base: 'px-0 py-0 text-base gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5',
+            label: 'p-1.5 text-xs gap-1.5',
+            item: 'py-1.5 px-4 text-sm gap-3',
+            itemLeadingIcon: 'size-5',
+            itemLeadingAvatarSize: '2xs',
+            itemLeadingChip: 'size-5',
+            itemLeadingChipSize: 'md',
+            itemTrailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'peer rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none data-[state=open]:shadow-bcGovInput focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGov',
+        color: 'primary',
+        variant: 'bcGov'
+      }
+    },
+    selectMenu: {
+      variants: {
+        size: {
+          bcGov: {
+            base: 'px-2.5 py-1.5 text-sm gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5',
+            label: 'p-1.5 text-xs gap-1.5',
+            item: 'p-1.5 text-sm gap-1.5',
+            itemLeadingIcon: 'size-5',
+            itemLeadingAvatarSize: '2xs',
+            itemLeadingChip: 'size-5',
+            itemLeadingChipSize: 'md',
+            itemTrailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGov',
+        color: 'primary',
+        variant: 'bcGov'
       }
     },
     textarea: {
