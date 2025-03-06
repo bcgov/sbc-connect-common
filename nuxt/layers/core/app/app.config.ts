@@ -291,7 +291,7 @@ export default defineAppConfig({
     },
     tooltip: {
       slots: {
-        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white',
+        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white ring-none',
         arrow: 'fill-gray-700'
       }
     }

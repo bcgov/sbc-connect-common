@@ -3,7 +3,7 @@
 
 /* Customize Nuxt UI default tokens */
 :root {
-  --ui-radius: var(--radius-sm);
+  --ui-radius: var(--radius-xs);
 }
 
 
