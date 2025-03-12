@@ -34,6 +34,11 @@ definePageMeta({
   // onBeforeSessionExpired: async () => await asyncFunction() // do something before session is expired using the default functionality
 })
 
+useTrackEvent('login', {
+  method: 'Google',
+  debug_mode: true
+})
+
 onMounted(async () => {
   // const test = ldStore.getStoredFlag('allowable-business-passcode-types')
   // console.log('test: ', test)

@@ -32,7 +32,8 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     '@nuxt/image',
-    'nuxt-lodash'
+    'nuxt-lodash',
+    'nuxt-gtag'
     // '@nuxt/test-utils/module'
   ],
 
@@ -127,5 +128,9 @@ export default defineNuxtConfig({
 
   piniaPluginPersistedstate: {
     storage: 'sessionStorage'
+  },
+
+  gtag: {
+    id: 'G-FRKYT2LTDN'
   }
 })

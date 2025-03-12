@@ -42,7 +42,7 @@ const value = ref([])
     <UButton label="home page" :to="localePath('/')" size="xl" />
 
     <!-- input floating label example - must have empty placeholder - must use id/for or aria-label -->
-     <h2>UInput</h2>
+    <h2>UInput</h2>
     <UInput placeholder="" id="example-floating-label-input">
       <label for="example-floating-label-input" class="floating-label-input">
         Email address
