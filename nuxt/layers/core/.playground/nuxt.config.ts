@@ -26,5 +26,6 @@ export default defineNuxtConfig({
     BCGovLogoSmFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_fr.png'),
     BCGovLogoLgEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_en.png'),
     BCGovLogoLgFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_fr.png')
-  }
+  },
+  css: ['~/assets/css/playground.css']
 })

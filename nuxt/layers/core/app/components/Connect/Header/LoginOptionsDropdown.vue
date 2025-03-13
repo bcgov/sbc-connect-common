@@ -16,6 +16,7 @@ const whatsNewStore = useConnectWhatsNewStore()
       :aria-label="isLargeScreen ? $t('label.selectLoginMethod') : $t('btn.mainMenu')"
       :icon="isLargeScreen ? 'i-mdi-caret-down' : 'i-mdi-menu'"
       trailing
+      class="px-2 py-1"
     />
 
     <!-- whats new slot, only shows on small screens -->

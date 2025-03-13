@@ -4,6 +4,7 @@ const { createAccountUrl } = useConnectNav()
 <template>
   <UButton
     color="white"
+    class="px-2 py-1"
     :label="$t('btn.createAccount')"
     :to="createAccountUrl()"
   />

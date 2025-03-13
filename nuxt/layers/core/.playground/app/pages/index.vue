@@ -34,10 +34,10 @@ definePageMeta({
   // onBeforeSessionExpired: async () => await asyncFunction() // do something before session is expired using the default functionality
 })
 
-useTrackEvent('login', {
-  method: 'Google',
-  debug_mode: true
-})
+// useTrackEvent('login', {
+//   method: 'Google',
+//   debug_mode: true
+// })
 
 onMounted(async () => {
   // const test = ldStore.getStoredFlag('allowable-business-passcode-types')
@@ -62,6 +62,9 @@ onMounted(async () => {
     { label: 'test 3' }
   ])
 })
+
+const items = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
+const value = ref('Backlog')
 </script>
 <template>
   <div class="flex flex-col gap-8 border border-black px-2 py-8">
@@ -69,9 +72,13 @@ onMounted(async () => {
       Testing
     </h1>
 
+    <div class="size-20 bg-midnightBlue-600"></div>
+
     <ConnectSpinner />
 
     <UButton label="test 2 page" :to="localePath('/test-2')" />
+
+    <USelect v-model="value" :items="items" class="w-48" />
 
     <ClientOnly>
       <UButton v-if="!isAuthenticated" label="Login" @click="login(IdpHint.BCSC)" />

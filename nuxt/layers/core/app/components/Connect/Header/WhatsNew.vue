@@ -12,6 +12,7 @@ const store = useConnectWhatsNewStore()
   >
     <UButton
       color="white"
+      class="px-2 py-1"
       :label="$t('btn.whatsNew')"
       @click="store.openWhatsNewSlideover"
     />
