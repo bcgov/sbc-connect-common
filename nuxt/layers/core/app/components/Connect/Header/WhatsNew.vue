@@ -9,9 +9,13 @@ const store = useConnectWhatsNewStore()
     color="error"
     position="top-left"
     inset
+    :ui="{
+      base: 'ring-(--ui-error)'
+    }"
   >
     <UButton
       color="white"
+      class="px-2 py-1 text-sm"
       :label="$t('btn.whatsNew')"
       @click="store.openWhatsNewSlideover"
     />

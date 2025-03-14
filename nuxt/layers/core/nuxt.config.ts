@@ -1,6 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { createResolver } from 'nuxt/kit';
+
+const { resolve } = createResolver(import.meta.url);
 
 const currentDir = dirname(fileURLToPath(import.meta.url))
 
@@ -19,6 +22,12 @@ export default defineNuxtConfig({
     }
   },
 
+  // ui: {
+  //   theme: {
+  //     colors: ['bcGovColor', 'midnightBlue']
+  //   }
+  // },
+
   css: [
     join(currentDir, './app/assets/css/core-main.css'),
     join(currentDir, './app/assets/css/core-layout.css')
@@ -26,12 +35,12 @@ export default defineNuxtConfig({
 
   modules: [
     '@nuxt/ui',
-    '@nuxt/content',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    'nuxt-lodash'
     // '@nuxt/test-utils/module'
   ],
 
@@ -51,23 +60,20 @@ export default defineNuxtConfig({
   // },
 
   alias: {
-    BCGovFonts: join(currentDir, './public/fonts/BCSans'),
-    BCGovLogoSmEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_en.png'),
-    BCGovLogoSmFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_fr.png'),
-    BCGovLogoLgEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_en.png'),
-    BCGovLogoLgFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_fr.png'),
-    '#core': fileURLToPath(new URL('./', import.meta.url))
+    BCGovFonts: resolve('./public/fonts/BCSans'),
+    BCGovLogoSmEn: resolve('./public/BCGovLogo/gov_bc_logo_vert_en.png'),
+    BCGovLogoSmFr: resolve('./public/BCGovLogo/gov_bc_logo_vert_fr.png'),
+    BCGovLogoLgEn: resolve('./public/BCGovLogo/gov_bc_logo_horiz_en.png'),
+    BCGovLogoLgFr: resolve('./public/BCGovLogo/gov_bc_logo_horiz_fr.png'),
+    '#core': resolve('./')
   },
 
-  colorMode: {
-    preference: 'light',
-    fallback: 'light'
-  },
+  // colorMode: {
+  //   preference: 'light',
+  //   fallback: 'light'
+  // },
 
   vite: {
-    optimizeDeps: {
-      include: ['keycloak-js', 'js-sha256']
-    },
     server: {
       watch: {
         usePolling: true
@@ -121,10 +127,14 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en-CA',
     detectBrowserLanguage: false,
-    vueI18n: './i18n.config.ts'
+    vueI18n: join(currentDir, './i18n.config.ts') 
   },
 
   piniaPluginPersistedstate: {
     storage: 'sessionStorage'
-  }
+  },
+
+  // gtag: {
+  //   id: 'G-FRKYT2LTDN'
+  // }
 })

@@ -8,7 +8,7 @@ interface WhatsNewItem {
   title: string
 }
 
-export const useConnectWhatsNewStore = defineStore('core-connect-whats-new-store', () => {
+export const useConnectWhatsNewStore = defineStore('connect-core-whatsnew-store', () => {
   const statusApiUrl = useRuntimeConfig().public.statusApiURL
   const { whatsNew } = useConnectSlideover()
 
@@ -30,6 +30,7 @@ export const useConnectWhatsNewStore = defineStore('core-connect-whats-new-store
   }
 
   function $reset () {
+    sessionStorage.removeItem('connect-core-whatsnew-store')
     whatsNewItems.value = []
     hasViewedWhatsNew.value = false
   }

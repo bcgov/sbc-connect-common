@@ -46,10 +46,10 @@ export default defineAppConfig({
       variants: {
         active: {
           true: {
-            link: 'text-white underline font-medium'
+            link: 'text-white font-medium'
           },
           false: {
-            link: 'text-white font-medium'
+            link: 'text-white underline font-medium'
           }
         }
       },
@@ -65,13 +65,34 @@ export default defineAppConfig({
       ]
     },
     button: {
+      slots: {
+        base: 'cursor-pointer'
+      },
       variants: {
         color: {
           white: 'text-white text-sm tracking-wide dark:text-white hover:bg-white/[0.1] focus-visible:ring-2 focus-visible:ring-white transition-colors duration-300 ease-in-out'
         },
         size: {
-          bcGov: {
-            base: 'px-7 py-3 text-sm gap-2.5',
+          sm: {
+            base: 'px-7 py-0.5 text-sm gap-2.5',
+            leadingIcon: 'size-4',
+            leadingAvatarSize: '3xs',
+            trailingIcon: 'size-4'
+          },
+          md: {
+            base: 'px-7 py-1.5 text-sm gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          },
+          lg: {
+            base: 'px-7 py-1.75 text-sm gap-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          },
+          xl: {
+            base: 'px-7 py-2.5 text-base gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
@@ -142,6 +163,48 @@ export default defineAppConfig({
         }
       ]
     },
+    icons: {
+      arrowLeft: 'i-mdi-arrow-left',
+      arrowRight: 'i-mdi-arrow-right',
+      check: 'i-mdi-check',
+      chevronDoubleLeft: 'i-mdi-chevron-double-left',
+      chevronDoubleRight: 'i-mdi-chevron-double-right',
+      chevronDown: 'i-mdi-menu-down',
+      chevronLeft: 'i-mdi-menu-left',
+      chevronRight: 'i-mdi-menu-right',
+      chevronUp: 'i-mdi-menu-up',
+      close: 'i-mdi-close',
+      ellipsis: 'i-mdi-dots-horizontal',
+      external: 'i-mdi-open-in-new',
+      folder: 'i-mdi-folder',
+      folderOpen: 'i-mdi-folder-open',
+      loading: 'i-mdi-loading',
+      minus: 'i-mdi-minus',
+      plus: 'i-mdi-plus',
+      search: 'i-mdi-magnify'
+    },
+    input: {
+      variants: {
+        size: {
+          bcGovLg: {
+            base: 'px-2.5 pb-1.5 pt-5 text-base gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'peer rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGovLg',
+        color: 'primary',
+        variant: 'bcGov'
+      }
+    },
     modal: {
       variants: {
         fullscreen: {
@@ -151,9 +214,105 @@ export default defineAppConfig({
         }
       }
     },
+    select: {
+      slots: {
+        content: 'rounded-sm',
+        group: 'px-0 py-2',
+        trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200', //  group-data-[state=open]:text-blue-500 group-data-focus:text-blue-500 // TODO: icon colour when focused
+        item: 'my-0.75 text-bcGovGray-900 before:rounded-none data-highlighted:text-blue-500 data-highlighted:before:bg-blue-50 data-[state=checked]:text-blue-500',
+        itemLeadingIcon: 'group-data-[state=checked]:text-blue-500 group-data-highlighted:text-blue-500 text-bcGovGray-900'
+      },
+      variants: {
+        size: {
+          bcGov: {
+            base: 'px-0 py-0 text-base gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5',
+            label: 'p-1.5 text-xs gap-1.5',
+            item: 'py-1.5 px-4 text-sm gap-3',
+            itemLeadingIcon: 'size-5',
+            itemLeadingAvatarSize: '2xs',
+            itemLeadingChip: 'size-5',
+            itemLeadingChipSize: 'md',
+            itemTrailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'peer rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none data-[state=open]:shadow-bcGovInput focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGov',
+        color: 'primary',
+        variant: 'bcGov'
+      }
+    },
+    selectMenu: {
+      variants: {
+        size: {
+          bcGov: {
+            base: 'px-2.5 py-1.5 text-sm gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5',
+            label: 'p-1.5 text-xs gap-1.5',
+            item: 'p-1.5 text-sm gap-1.5',
+            itemLeadingIcon: 'size-5',
+            itemLeadingAvatarSize: '2xs',
+            itemLeadingChip: 'size-5',
+            itemLeadingChipSize: 'md',
+            itemTrailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGov',
+        color: 'primary',
+        variant: 'bcGov'
+      }
+    },
+    textarea: {
+      variants: {
+        size: {
+          bcGovLg: {
+            base: 'px-2.5 pb-1.5 pt-5 text-base gap-1.5',
+            leading: 'ps-2.5',
+            trailing: 'pe-2.5',
+            leadingIcon: 'size-5',
+            leadingAvatarSize: '2xs',
+            trailingIcon: 'size-5'
+          }
+        },
+        variant: {
+          bcGov: 'peer rounded-t-sm rounded-b-none bg-bcGovGray-100 focus:ring-0 focus:outline-none focus:shadow-bcGovInput text-bcGovGray-900'
+        }
+      },
+      defaultVariants: {
+        size: 'bcGovLg',
+        color: 'primary',
+        variant: 'bcGov'
+      }
+    },
+    toast: {
+      slots: {
+        root: 'bg-bcGovGray-700 ring-bcGovGray-700 ring-none',
+        title: 'text-white',
+        description: 'text-white',
+        progress: 'hidden',
+        close: 'hidden'
+      }
+    },
     tooltip: {
       slots: {
-        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white',
+        content: 'bg-bcGovGray-700 ring-bcGovGray-700 text-white ring-none',
         arrow: 'fill-gray-700'
       }
     }

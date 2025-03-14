@@ -7,14 +7,12 @@ useHead({
     dir: () => localeProperties.value.dir
   }
 })
-
-onMounted(async () => {
-  await useConnectWhatsNewStore().initWhatsNew()
-})
 </script>
 <template>
   <!-- TODO: add locale prop to UApp -->
-  <UApp>
+  <UApp
+    :toaster="{ position: 'bottom-center' }"
+  >
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

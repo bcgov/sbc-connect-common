@@ -1,6 +1,6 @@
 import { type ApiError, ErrorCategory } from '#imports'
 /** Manages connect account data */
-export const useConnectAccountStore = defineStore('nuxt-core-connect-account-store', () => {
+export const useConnectAccountStore = defineStore('connect-core-account-store', () => {
   const { $authApi, $keycloak } = useNuxtApp()
   const rtc = useRuntimeConfig().public
   const { kcUser, isAuthenticated } = useKeycloak()
@@ -235,7 +235,7 @@ export const useConnectAccountStore = defineStore('nuxt-core-connect-account-sto
   }
 
   function $reset () {
-    sessionStorage.removeItem('nuxt-core-connect-account-store')
+    sessionStorage.removeItem('connect-core-account-store')
     currentAccount.value = {} as Account
     userAccounts.value = []
     pendingApprovalCount.value = 0

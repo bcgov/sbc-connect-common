@@ -1,7 +1,7 @@
 import { initialize } from 'launchdarkly-js-client-sdk'
 import type { LDClient, LDFlagSet, LDOptions, LDMultiKindContext } from 'launchdarkly-js-client-sdk'
 
-export const useConnectLaunchdarklyStore = defineStore('core-connect-ld-store', () => {
+export const useConnectLaunchdarklyStore = defineStore('connect-core-ld-store', () => {
   const keycloak = reactive(useKeycloak())
   const accountStore = useConnectAccountStore()
   const ldClient: Ref<LDClient | null> = ref(null)
@@ -73,6 +73,7 @@ export const useConnectLaunchdarklyStore = defineStore('core-connect-ld-store', 
   }
 
   function $reset () {
+    sessionStorage.removeItem('connect-core-ld-store')
     ldInitialized.value = false
     ldClient.value = null
     ldFlagSet.value = {}
