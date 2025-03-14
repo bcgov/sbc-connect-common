@@ -1,7 +1,7 @@
 {
-  "name": "@dwol/nuxt-core-layer-test-ui3",
+  "name": "@sbc-connect/nuxt-core-layer-beta",
   "type": "module",
-  "version": "0.0.3",
+  "version": "0.0.0",
   "main": "./nuxt.config.ts",
   "scripts": {
     "dev": "nuxi dev .playground --port 3000",
