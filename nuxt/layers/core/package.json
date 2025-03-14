@@ -1,7 +1,7 @@
 {
   "name": "@dwol/nuxt-core-layer-test-ui3",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./nuxt.config.ts",
   "scripts": {
     "dev": "nuxi dev .playground --port 3000",

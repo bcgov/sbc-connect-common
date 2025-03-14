@@ -46,10 +46,10 @@ export default defineAppConfig({
       variants: {
         active: {
           true: {
-            link: 'text-white underline font-medium'
+            link: 'text-white font-medium'
           },
           false: {
-            link: 'text-white font-medium'
+            link: 'text-white underline font-medium'
           }
         }
       },
@@ -74,19 +74,19 @@ export default defineAppConfig({
         },
         size: {
           sm: {
-            base: 'px-7 py-0.5 text-base gap-2.5',
+            base: 'px-7 py-0.5 text-sm gap-2.5',
             leadingIcon: 'size-4',
             leadingAvatarSize: '3xs',
             trailingIcon: 'size-4'
           },
           md: {
-            base: 'px-7 py-1.5 text-base gap-2.5',
+            base: 'px-7 py-1.5 text-sm gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
           },
           lg: {
-            base: 'px-7 py-1.75 text-base gap-2.5',
+            base: 'px-7 py-1.75 text-sm gap-2.5',
             leadingIcon: 'size-5',
             leadingAvatarSize: '2xs',
             trailingIcon: 'size-5'
@@ -174,7 +174,7 @@ export default defineAppConfig({
       chevronRight: 'i-mdi-menu-right',
       chevronUp: 'i-mdi-menu-up',
       close: 'i-mdi-close',
-      ellipsis: 'i-lucide-ellipsis',
+      ellipsis: 'i-mdi-dots-horizontal',
       external: 'i-mdi-open-in-new',
       folder: 'i-mdi-folder',
       folderOpen: 'i-mdi-folder-open',
@@ -303,7 +303,7 @@ export default defineAppConfig({
     },
     toast: {
       slots: {
-        root: 'bg-bcGovGray-700 rounded-sm ring-none',
+        root: 'bg-bcGovGray-700 ring-bcGovGray-700 ring-none',
         title: 'text-white',
         description: 'text-white',
         progress: 'hidden',
@@ -312,7 +312,7 @@ export default defineAppConfig({
     },
     tooltip: {
       slots: {
-        content: 'bg-gray-700 rounded-sm ring-gray-700 text-white ring-none',
+        content: 'bg-bcGovGray-700 ring-bcGovGray-700 text-white ring-none',
         arrow: 'fill-gray-700'
       }
     }

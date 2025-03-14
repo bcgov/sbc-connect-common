@@ -3,7 +3,7 @@ const { t } = useI18n()
 const accountStore = useConnectAccountStore()
 
 const breadcrumbs = computed<ConnectBreadcrumb[]>(() => {
-  const metaCrumbs = useRoute().meta.breadcrumbs
+  const metaCrumbs = useRoute().meta.breadcrumbs as ConnectBreadcrumb[] | undefined
 
   if (metaCrumbs) {
     return metaCrumbs.map((bc) => {
@@ -52,6 +52,7 @@ function resolveBackHref () {
       <UBreadcrumb
         :items="breadcrumbs"
         :aria-label="$t('ConnectBreadcrumb.arialabel')"
+        separator-icon="i-mdi-chevron-right"
       />
     </div>
   </div>
