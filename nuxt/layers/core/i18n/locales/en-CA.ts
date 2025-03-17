@@ -25,7 +25,8 @@ export default {
     selectLoginMethod: 'Select log in method',
     bcsc: 'BC Services Card',
     bceid: 'BCeID',
-    idir: 'IDIR'
+    idir: 'IDIR',
+    whatsNewSlideover: "What's New at BC Registries"
   },
   notifications: {
     none: 'No Notifications',

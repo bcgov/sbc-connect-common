@@ -25,7 +25,8 @@ export default {
     selectLoginMethod: 'Sélectionnez la méthode de connexion',
     bcsc: 'BC Services Card',
     bceid: 'BCeID',
-    idir: 'IDIR'
+    idir: 'IDIR',
+    whatsNewSlideover: "Nouveautés aux Registres de la CB"
   },
   notifications: {
     none: 'Aucune Notification',

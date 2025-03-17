@@ -6,7 +6,7 @@ const store = useConnectWhatsNewStore()
 </script>
 <template>
   <USlideover
-    title="Whats New at BC Registries"
+    :title="$t('label.whatsNewSlideover')"
     :overlay="false"
     :close="{
       color: 'neutral',
@@ -28,7 +28,7 @@ const store = useConnectWhatsNewStore()
               :key="i"
               class="flex flex-col border-b border-bcGovGray-500 p-4 last:border-0"
             >
-              <h3 class="text-lg">
+              <h3 class="text-lg font-bold">
                 {{ item.title }}
               </h3>
               <span class="text-sm text-bcGovGray-700">{{ item.date }}</span>
