@@ -1,5 +1,6 @@
 <script setup lang="ts">
-const version = useRuntimeConfig().public.version
+const uiVersion = useRuntimeConfig().public.version
+const ac = useAppConfig().connect.core.footer
 const localePath = useLocalePath()
 const links = [
   {
@@ -32,8 +33,15 @@ const links = [
     target: '_blank'
   }
 ]
-</script>
 
+const appVersions = computed<string[]>(() => {
+  const items = [...ac.versions]
+
+  items.unshift(uiVersion)
+
+  return items
+})
+</script>
 <template>
   <footer
     id="connect-main-footer"
@@ -60,8 +68,14 @@ const links = [
       </nav>
       <div class="-mb-1 flex items-center">
         <span class="italic text-bcGovColor-navDivider">{{ $t('ConnectFooter.bcApp') }}</span>
-        <UTooltip arrow :text="version">
+        <UTooltip arrow :ui="{ content: 'h-fit' }">
           <UButton :aria-label="$t('btn.appVersion')" color="white" icon="i-mdi-info-outline" />
+
+          <template #content>
+            <div class="flex flex-col">
+              <span v-for="(item, i) in appVersions" :key="i">{{ item }}</span>
+            </div>
+          </template>
         </UTooltip>
       </div>
     </div>

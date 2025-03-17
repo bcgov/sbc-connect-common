@@ -2,11 +2,13 @@
 import { useTestStore } from '~/stores/test-store';
 import { manageAccountChange } from '../utils/manageAccountChange';
 import type { ButtonProps } from '@nuxt/ui';
+import type { ConnectAppConfig } from '#core/app/types/core-app-config';
 
 const connectNav = useConnectNav()
 const localePath = useLocalePath()
 const { isAuthenticated, login, logout } = useKeycloak()
 const ldStore = useConnectLaunchdarklyStore()
+const ac = (useAppConfig() as ConnectAppConfig).connect.core
 
 const actions: ButtonProps[] = [
   {
@@ -61,6 +63,9 @@ onMounted(async () => {
     { label: 'test 2', to: useRuntimeConfig().public.registryHomeURL },
     { label: 'test 3' }
   ])
+
+  ac.footer.versions.push('Test UI: v1.0.0;')
+  ac.footer.versions.push('Test API2: v1.0.0;')
 })
 
 const items = ref(['Backlog', 'Todo', 'In Progress', 'Done'])
@@ -72,7 +77,7 @@ const value = ref('Backlog')
       Testing
     </h1>
 
-    <div class="size-20 bg-midnightBlue-600"></div>
+    <pre>{{ ac.footer.versions }}</pre>
 
     <ConnectSpinner />
 
