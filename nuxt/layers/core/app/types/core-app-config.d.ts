@@ -16,24 +16,25 @@ export type HeaderOptions = {
   }
 }
 
-declare module '@nuxt/schema' {
-  interface AppConfigInput {
-    connect: {
-      core: {
-        login: LoginConfig,
-        header: {
-          options: HeaderOptions
+export type ConnectAppConfig = {
+  connect: {
+    core: {
+      login: LoginConfig,
+      header: {
+        options: HeaderOptions
+      },
+      footer: {
+        versions: string[]
+      },
+      plugin: {
+        authApi: {
+          errorRedirect: {
+            401: string
+          }
         },
-        plugin: {
-          authApi: {
-            errorRedirect: {
-              401: string
-            }
-          },
-          payApi: {
-            errorRedirect: {
-              401: string
-            }
+        payApi: {
+          errorRedirect: {
+            401: string
           }
         }
       }
@@ -41,29 +42,12 @@ declare module '@nuxt/schema' {
   }
 }
 
+declare module '@nuxt/schema' {
+  interface AppConfigInput extends ConnectAppConfig {}
+}
+
 declare module 'nuxt/schema' {
-  interface AppConfig {
-    connect: {
-      core: {
-        login: LoginConfig,
-        header: {
-          options: HeaderOptions
-        },
-        plugin: {
-          authApi: {
-            errorRedirect: {
-              401: string
-            }
-          },
-          payApi: {
-            errorRedirect: {
-              401: string
-            }
-          }
-        }
-      }
-    }
-  }
+  interface AppConfig extends ConnectAppConfig {}
 }
 
 export {}

@@ -42,7 +42,7 @@ onMounted(() => {
       <UButton
         :label="$t('btn.goHome')"
         icon="i-mdi-home"
-        size="bcGov"
+        size="xl"
         :to="localePath('/')"
       />
     </div>

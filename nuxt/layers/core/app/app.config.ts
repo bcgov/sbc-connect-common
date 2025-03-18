@@ -19,6 +19,9 @@ export default defineAppConfig({
           }
         }
       },
+      footer: {
+        versions: []
+      },
       plugin: {
         authApi: {
           errorRedirect: {
@@ -312,7 +315,7 @@ export default defineAppConfig({
     },
     tooltip: {
       slots: {
-        content: 'bg-bcGovGray-700 ring-bcGovGray-700 text-white ring-none',
+        content: 'bg-bcGovGray-700 ring-bcGovGray-700 text-white',
         arrow: 'fill-gray-700'
       }
     }

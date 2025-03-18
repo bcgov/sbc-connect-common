@@ -15,6 +15,7 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
       :aria-label="$t('btn.accountOptionsMenu')"
       :icon="isLargeScreen ? 'i-mdi-caret-down' : ''"
       trailing
+      class="px-2 py-1"
     >
       <ConnectHeaderAccountLabel
         class="hidden lg:flex"
@@ -36,16 +37,6 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
         :account-name="accountStore.currentAccount.label ? parseSpecialChars(accountStore.currentAccount.label, 'ACCOUNT') : ''"
         theme="dropdown"
       />
-    </template>
-
-    <!-- account setting slot -->
-    <template #settings>
-      <span class="text-bcGovColor-darkGray">{{ $t('label.accountSettings') }}</span>
-    </template>
-
-    <!-- switch accounts slot -->
-    <template #accounts>
-      <span class="text-bcGovColor-darkGray">{{ $t('label.switchAccount') }}</span>
     </template>
   </UDropdownMenu>
 </template>
