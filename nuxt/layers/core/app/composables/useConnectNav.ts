@@ -1,12 +1,13 @@
 import type { DropdownMenuItem } from '@nuxt/ui'
 import { useConnectWhatsNewStore } from '~/stores/connect-whats-new'
+import type { ConnectAppConfig } from '~/types/core-app-config'
 
 // handle navigation items and functionality
 export function useConnectNav () {
   const rtc = useRuntimeConfig()
   const authWebUrl = rtc.public.authWebURL
   const appBaseUrl = rtc.public.baseUrl
-  const layerConfig = useAppConfig().connect.core
+  const layerConfig = (useAppConfig() as ConnectAppConfig).connect.core
   const route = useRoute()
   const localePath = useLocalePath()
   const t = useNuxtApp().$i18n.t

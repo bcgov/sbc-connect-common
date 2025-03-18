@@ -26,7 +26,7 @@ export default {
     bcsc: 'BC Services Card',
     bceid: 'BCeID',
     idir: 'IDIR',
-    whatsNewSlideover: "Nouveautés aux Registres de la CB"
+    whatsNewSlideover: 'Nouveautés aux Registres de la CB'
   },
   notifications: {
     none: 'Aucune Notification',
