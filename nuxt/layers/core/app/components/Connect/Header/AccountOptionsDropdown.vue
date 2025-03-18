@@ -15,6 +15,7 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
       :aria-label="$t('btn.accountOptionsMenu')"
       :icon="isLargeScreen ? 'i-mdi-caret-down' : ''"
       trailing
+      class="px-2 py-1"
     >
       <ConnectHeaderAccountLabel
         class="hidden lg:flex"

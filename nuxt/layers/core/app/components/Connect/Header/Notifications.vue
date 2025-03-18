@@ -20,7 +20,7 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
         :aria-label="$t('btn.notifications.aria', { count: accountStore.pendingApprovalCount })"
         :icon="isLargeScreen ? 'i-mdi-caret-down' : ''"
         trailing
-        class="text-sm"
+        class="px-2 py-1 text-sm"
       >
         <template #leading>
           <UIcon name="i-mdi-bell-outline" class="size-6 shrink-0" />
