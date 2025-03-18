@@ -82,7 +82,7 @@ onUnmounted(() => {
             :block="isSmallScreen"
             :label="$t('ConnectModalSessionExpiring.continueBtn.main')"
             :aria-label="$t('ConnectModalSessionExpiring.continueBtn.aria')"
-            size="bcGov"
+            size="xl"
             class="font-bold"
             @click="closeFn"
           />

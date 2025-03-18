@@ -38,15 +38,5 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
         theme="dropdown"
       />
     </template>
-
-    <!-- account setting slot -->
-    <template #settings>
-      <span class="text-bcGovColor-darkGray">{{ $t('label.accountSettings') }}</span>
-    </template>
-
-    <!-- switch accounts slot -->
-    <template #accounts>
-      <span class="text-bcGovColor-darkGray">{{ $t('label.switchAccount') }}</span>
-    </template>
   </UDropdownMenu>
 </template>
