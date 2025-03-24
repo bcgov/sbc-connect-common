@@ -8,6 +8,9 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
   <UDropdownMenu
     id="account-options-dropdown"
     :items="loggedInUserOptions"
+    :ui="{
+      content: 'max-w-[90dvw]'
+    }"
   >
     <UButton
       id="account-options-button"

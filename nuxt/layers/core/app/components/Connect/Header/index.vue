@@ -7,7 +7,7 @@ const ac = useAppConfig().connect.core.header.options
     <div class="flex items-center justify-between">
       <ConnectHeaderLogoHomeLink />
       <ClientOnly>
-        <div class="flex gap-1">
+        <div class="flex gap-4">
           <ConnectHeaderAuthenticatedOptions v-if="isAuthenticated" />
           <ConnectHeaderUnauthenticatedOptions v-else />
           <ConnectLocaleSelect v-if="ac.localeSelect" />

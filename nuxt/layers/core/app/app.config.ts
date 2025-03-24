@@ -110,7 +110,7 @@ export default defineAppConfig({
     },
     dropdownMenu: {
       slots: {
-        content: 'min-w-32 max-h-[75dvh] w-min bg-(--ui-bg) shadow-lg rounded-[calc(var(--ui-radius)*1.5)] ring ring-(--ui-border) divide-y divide-(--ui-border) overflow-y-auto scroll-py-1 data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in]',
+        content: 'min-w-32 max-h-[75dvh] bg-(--ui-bg) shadow-lg rounded-[calc(var(--ui-radius)*1.5)] ring ring-(--ui-border) divide-y divide-(--ui-border) overflow-y-auto scroll-py-1 data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in]',
         group: 'p-0 isolate',
         item: 'group relative w-full flex items-center select-none outline-none before:absolute before:z-[-1] before:inset-px before:rounded-none data-disabled:cursor-not-allowed data-disabled:opacity-75 cursor-pointer',
         separator: '-mx-0 my-0 h-px bg-(--ui-border)'

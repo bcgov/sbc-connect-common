@@ -10,13 +10,16 @@ defineProps({
     <UAvatar
       :text="username[0] ? username[0].toLocaleUpperCase($i18n.locale) : 'U'"
       size="md"
-      class="text-white"
+      class="text-white self-start"
       :ui="{ root: 'bg-blue-300 rounded-none text-lg', fallback: 'text-white font-bold' }"
     />
     <div class="mx-2 flex flex-col text-left font-normal tracking-wide">
       <span
-        class="line-clamp-1 overflow-hidden text-ellipsis text-sm"
-        :class="{'text-white': theme === 'header', 'text-bcGovColor-darkGray': theme === 'dropdown'}"
+        class="text-sm"
+        :class="{
+          'line-clamp-1 overflow-hidden text-ellipsis text-white max-w-64': theme === 'header',
+          'text-bcGovColor-darkGray max-w-80': theme === 'dropdown'
+        }"
       >
         {{ username }}
       </span>
