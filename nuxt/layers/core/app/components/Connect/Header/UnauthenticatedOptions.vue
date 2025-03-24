@@ -4,7 +4,7 @@ const ac = useAppConfig().connect.core.header.options.unauthenticated
 <template>
   <div
     id="connect-header-unauth-options"
-    class="flex gap-1"
+    class="flex gap-4"
   >
     <!-- whats new slideover -->
     <ConnectHeaderWhatsNew v-if="ac.whatsNew" class="hidden lg:flex" />

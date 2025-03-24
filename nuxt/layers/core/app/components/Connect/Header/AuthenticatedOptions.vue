@@ -4,7 +4,7 @@ const ac = useAppConfig().connect.core.header.options.authenticated
 <template>
   <div
     id="connect-header-auth-options"
-    class="flex gap-1"
+    class="flex gap-4"
   >
     <!-- notifications dropdown -->
     <ConnectHeaderNotifications v-if="ac.notifications" />
