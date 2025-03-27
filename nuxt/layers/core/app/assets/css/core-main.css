@@ -4,7 +4,7 @@
 /* Customize Nuxt UI default tokens */
 :root {
   --ui-radius: var(--radius-xs);
-  --ui-error: var(--ui-color-red-600);
+  --ui-error: var(--color-red-600);
 }
 
 
