@@ -1,8 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import { createResolver } from 'nuxt/kit'
 
-const currentDir = dirname(fileURLToPath(import.meta.url))
+const { resolve } = createResolver(import.meta.url)
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
@@ -25,8 +24,8 @@ export default defineNuxtConfig({
   },
 
   css: [
-    join(currentDir, './app/assets/css/core-main.css'),
-    join(currentDir, './app/assets/css/core-layout.css')
+    resolve('./app/assets/css/core-main.css'),
+    resolve('./app/assets/css/core-layout.css')
   ],
 
   modules: [
@@ -50,12 +49,12 @@ export default defineNuxtConfig({
   },
 
   alias: {
-    BCGovFonts: join(currentDir, './public/fonts/BCSans'),
-    BCGovLogoSmEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_en.png'),
-    BCGovLogoSmFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_vert_fr.png'),
-    BCGovLogoLgEn: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_en.png'),
-    BCGovLogoLgFr: join(currentDir, './public/BCGovLogo/gov_bc_logo_horiz_fr.png'),
-    '#core': join(currentDir, './')
+    BCGovFonts: resolve('./public/fonts/BCSans'),
+    BCGovLogoSmEn: resolve('./public/BCGovLogo/gov_bc_logo_vert_en.png'),
+    BCGovLogoSmFr: resolve('./public/BCGovLogo/gov_bc_logo_vert_fr.png'),
+    BCGovLogoLgEn: resolve('./public/BCGovLogo/gov_bc_logo_horiz_en.png'),
+    BCGovLogoLgFr: resolve('./public/BCGovLogo/gov_bc_logo_horiz_fr.png'),
+    '#core': resolve('./')
   },
 
   vite: {
@@ -112,7 +111,7 @@ export default defineNuxtConfig({
     langDir: 'locales',
     defaultLocale: 'en-CA',
     detectBrowserLanguage: false,
-    vueI18n: join(currentDir, './i18n.config.ts')
+    vueI18n: resolve('./i18n.config.ts')
   },
 
   piniaPluginPersistedstate: {
