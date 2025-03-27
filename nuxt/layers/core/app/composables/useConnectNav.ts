@@ -91,10 +91,9 @@ export function useConnectNav () {
               }
             }
           },
+          slot: 'account-item',
           icon: isActive ? 'i-mdi-check' : '',
           class: isActive ? 'bg-bcGovGray-100 text-bcGovColor-activeBlue' : ''
-          // labelClass: isActive ? 'pl-0' : 'pl-6', // TODO: implement ??
-          // iconClass: isActive ? 'text-bcGovColor-activeBlue' : ''
         })
       })
     }

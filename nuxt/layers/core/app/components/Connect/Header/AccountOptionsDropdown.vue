@@ -41,5 +41,17 @@ const isLargeScreen = useMediaQuery('(min-width: 1024px)')
         theme="dropdown"
       />
     </template>
+
+    <!-- account item slot required for icon color and label padding -->
+    <template #account-item="{ item }">
+      <UIcon
+        v-if="item.icon"
+        :name="item.icon"
+        class="size-5 text-blue-500 shrink-0"
+      />
+      <span :class="{ 'pl-6': !item.icon }">
+        {{ item.label }}
+      </span>
+    </template>
   </UDropdownMenu>
 </template>
