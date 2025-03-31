@@ -38,6 +38,7 @@ export default {
     navLabel: 'Liens utiles', // <nav> aria-label
     home: 'Accueil',
     releaseNotes: 'Notes de Version',
+    pricing: 'Tarification',
     disclaimer: 'Clause de non-responsabilité',
     privacy: 'Confidentialité',
     ally: 'Accessibilité',

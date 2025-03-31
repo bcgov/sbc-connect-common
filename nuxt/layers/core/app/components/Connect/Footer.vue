@@ -12,6 +12,11 @@ const links = [
     target: '_blank'
   },
   {
+    label: 'ConnectFooter.pricing',
+    to: 'https://www.bcregistry.gov.bc.ca/product-fees',
+    target: '_blank'
+  },
+  {
     label: 'ConnectFooter.disclaimer',
     to: 'https://www2.gov.bc.ca/gov/content/home/disclaimer',
     target: '_blank'
