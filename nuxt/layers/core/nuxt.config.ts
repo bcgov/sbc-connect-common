@@ -71,6 +71,7 @@ export default defineNuxtConfig({
       keycloakAuthUrl: process.env.NUXT_KEYCLOAK_AUTH_URL,
       keycloakRealm: process.env.NUXT_KEYCLOAK_REALM,
       keycloakClientId: process.env.NUXT_KEYCLOAK_CLIENTID,
+      siteminderLogoutUrl: process.env.NUXT_SITEMINDER_LOGOUT_URL || '',
       authWebURL: process.env.NUXT_AUTH_WEB_URL,
       authApiURL: `${process.env.NUXT_AUTH_API_URL || ''}${process.env.NUXT_AUTH_API_VERSION || ''}`,
       ldClientId: process.env.NUXT_LD_CLIENT_ID || '',

@@ -1,5 +1,6 @@
 export const useKeycloak = () => {
   const { $keycloak } = useNuxtApp()
+  const rtc = useRuntimeConfig().public
 
   /**
    * Logs the user in using the idpHint 'bcsc', 'idir' or 'bceid' and an optional redirect URL.
@@ -25,8 +26,13 @@ export const useKeycloak = () => {
    * @returns A promise that resolves when logout is complete.
    */
   function logout (redirect?: string): Promise<void> {
+    const siteminderUrl = rtc.siteminderLogoutUrl
     const logoutRedirectUrl = sessionStorage.getItem(ConnectStorageKeys.LOGOUT_REDIRECT_URL)
-    const redirectUri = redirect ?? logoutRedirectUrl ?? window.location.href
+    let redirectUri = redirect ?? logoutRedirectUrl ?? window.location.href
+
+    if (siteminderUrl) {
+      redirectUri = `${siteminderUrl}?returl=${redirectUri.replace(/(https?:\/\/)|(\/)+/g, '$1$2')}&retnow=1`
+    }
 
     resetPiniaStores()
     return $keycloak.logout({
