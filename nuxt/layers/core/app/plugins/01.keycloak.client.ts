@@ -38,39 +38,16 @@ export default defineNuxtPlugin(async () => {
   const refreshIntervalTimeout = rtc.tokenRefreshInterval as number
   const minValidity = toValue((rtc.tokenMinValidity as number) / 1000) // convert to seconds
   const idleTimeout = rtc.sessionIdleTimeout as number
-  const modalTimeout = rtc.sessionExpiredModalTimeout as number
-  let modalTimeoutId: ReturnType<typeof setTimeout> | null = null
 
   const route = useRoute()
   const { idle } = useIdle(idleTimeout)
 
-  function resetSessionTimeout () {
-    if (modalTimeoutId) {
-      clearTimeout(modalTimeoutId)
-      modalTimeoutId = null
-    }
-  }
-
   // executed when user is authenticated and idle = true
-  // if route meta provided, override default behaviour
   async function sessionExpired () {
-    if (route.meta.sessionExpiredFn) {
+    if (route.meta.sessionExpiredFn) { // if route meta provided, override default behaviour
       await route.meta.sessionExpiredFn()
-    } else {
-      // cleanup modal timeout if exists
-      resetSessionTimeout()
-
-      // start countdown until user logged out
-      modalTimeoutId = setTimeout(async () => {
-        if (route.meta.onBeforeSessionExpired) {
-          await route.meta.onBeforeSessionExpired()
-        }
-        sessionStorage.setItem(ConnectStorageKeys.CONNECT_SESSION_EXPIRED, 'true')
-        keycloak.logout()
-      }, modalTimeout)
-
-      // open modal and pass resetSessionTimeout as a callback to clear the timeout if the user closes the modal with click/keyboard event
-      await useConnectModals().openSessionExpiringModal(resetSessionTimeout)
+    } else { // open expiry modal
+      await useConnectModals().openSessionExpiringModal()
     }
   }
 

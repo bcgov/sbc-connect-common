@@ -23,17 +23,17 @@ const actions: ButtonProps[] = [
   }
 ]
 
-async function asyncFunction() {
-  return new Promise<void>((resolve) => setTimeout(() => {
-    console.log("test async")
-    resolve()
-  }, 5000))
-}
+// async function asyncFunction() {
+//   return new Promise<void>((resolve) => setTimeout(() => {
+//     console.log("test async")
+//     resolve()
+//   }, 5000))
+// }
 
 definePageMeta({
   onAccountChange: (newAccount, oldAccount) => manageAccountChange(newAccount, oldAccount),
   // sessionExpiredFn: () => console.log('session expired route meta'), // overwrite session expiry functionality
-  onBeforeSessionExpired: async () => await asyncFunction() // do something before session is expired using the default functionality
+  // onBeforeSessionExpired: async () => await asyncFunction() // do something before session is expired using the default functionality
 })
 
 // useTrackEvent('login', {

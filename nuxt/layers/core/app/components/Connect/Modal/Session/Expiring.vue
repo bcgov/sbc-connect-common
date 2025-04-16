@@ -2,19 +2,23 @@
 const isSmallScreen = useMediaQuery('(max-width: 640px)')
 const modalTimeout = useRuntimeConfig().public.sessionExpiredModalTimeout
 const { t } = useI18n()
+const route = useRoute()
 
-const props = defineProps<{
-  closeFn:() => void
-}>()
-
-defineEmits<{
-  afterLeave: [void]
-}>()
+const emit = defineEmits<{ close: [] }>()
 
 const timeRemaining = ref(toValue((modalTimeout as number) / 1000))
-setInterval(() => {
+
+const intervalId = setInterval(async () => {
   const value = timeRemaining.value - 1
   timeRemaining.value = value < 0 ? 0 : value
+
+  if (value === 0) {
+    if (route.meta.onBeforeSessionExpired) {
+      await route.meta.onBeforeSessionExpired()
+    }
+    sessionStorage.setItem(ConnectStorageKeys.CONNECT_SESSION_EXPIRED, 'true')
+    await useKeycloak().logout()
+  }
 }, 1000)
 
 const ariaCountdownText = computed(() => {
@@ -28,21 +32,15 @@ const ariaCountdownText = computed(() => {
 })
 
 function closeModal () {
-  props.closeFn()
+  clearInterval(intervalId)
+  emit('close')
 }
 
-onMounted(async () => {
+onMounted(() => {
   // allow any keypress to close the modal
   window.addEventListener('keydown', closeModal)
-
-  // cant add these props directly to UModal so using this as workaround
-  await nextTick()
-  const el = document.getElementById('session-expired-dialog')
-  if (el) {
-    el.setAttribute('aria-labelledby', 'session-expired-dialog-title')
-    el.setAttribute('aria-describedby', 'session-expired-dialog-description')
-  }
 })
+
 onUnmounted(() => {
   // cleanup
   window.removeEventListener('keydown', closeModal)
@@ -54,7 +52,7 @@ onUnmounted(() => {
     overlay
     :title="$t('ConnectModalSessionExpiring.title')"
     :description="$t('ConnectModalSessionExpiring.content', { count: timeRemaining })"
-    @after:leave="$emit('afterLeave')"
+    @after:leave="closeModal"
   >
     <template #content>
       <div class="px-6 py-6 flex flex-col gap-6">
@@ -84,7 +82,7 @@ onUnmounted(() => {
             :aria-label="$t('ConnectModalSessionExpiring.continueBtn.aria')"
             size="xl"
             class="font-bold"
-            @click="closeFn"
+            @click="closeModal"
           />
         </div>
       </div>
