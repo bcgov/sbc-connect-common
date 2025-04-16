@@ -4,6 +4,8 @@ import { createResolver } from 'nuxt/kit'
 const { resolve } = createResolver(import.meta.url)
 
 export default defineNuxtConfig({
+  ssr: false,
+
   devtools: { enabled: false },
 
   compatibilityDate: '2024-07-16',
