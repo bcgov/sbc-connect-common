@@ -33,18 +33,21 @@ onMounted(() => {
 })
 </script>
 <template>
-  <NuxtLayout name="default">
-    <div class="m-auto flex flex-col items-center gap-4">
-      <h1>
-        {{ $t(`ConnectPage.error.${errorKey}.h1`) }}
-      </h1>
-      <p>{{ $t(`ConnectPage.error.${errorKey}.content`) }}</p>
-      <UButton
-        :label="$t('btn.goHome')"
-        icon="i-mdi-home"
-        size="xl"
-        :to="localePath('/')"
-      />
-    </div>
-  </NuxtLayout>
+  <!-- TODO: add locale prop to UApp -->
+  <UApp :toaster="{ position: 'bottom-center' }">
+    <NuxtLayout name="default">
+      <div class="m-auto flex flex-col items-center gap-4">
+        <h1>
+          {{ $t(`ConnectPage.error.${errorKey}.h1`) }}
+        </h1>
+        <p>{{ $t(`ConnectPage.error.${errorKey}.content`) }}</p>
+        <UButton
+          :label="$t('btn.goHome')"
+          icon="i-mdi-home"
+          size="xl"
+          :to="localePath('/')"
+        />
+      </div>
+    </NuxtLayout>
+  </UApp>
 </template>

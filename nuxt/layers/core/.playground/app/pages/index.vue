@@ -23,12 +23,12 @@ const actions: ButtonProps[] = [
   }
 ]
 
-async function asyncFunction() {
-  return new Promise<void>((resolve) => setTimeout(() => {
-    console.log("test async")
-    resolve()
-  }, 5000))
-}
+// async function asyncFunction() {
+//   return new Promise<void>((resolve) => setTimeout(() => {
+//     console.log("test async")
+//     resolve()
+//   }, 5000))
+// }
 
 definePageMeta({
   onAccountChange: (newAccount, oldAccount) => manageAccountChange(newAccount, oldAccount),
