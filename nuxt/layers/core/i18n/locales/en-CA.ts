@@ -36,6 +36,7 @@ export default {
     navLabel: 'Useful Links', // <nav> aria-label
     home: 'Home',
     releaseNotes: 'Release Notes',
+    fees: 'Fees',
     disclaimer: 'Disclaimer',
     privacy: 'Privacy',
     ally: 'Accessibility',

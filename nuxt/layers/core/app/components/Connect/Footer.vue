@@ -13,6 +13,11 @@ const links = [
     target: '_blank'
   },
   {
+    label: 'ConnectFooter.fees',
+    to: `${useRuntimeConfig().public.registryHomeURL}product-fees`,
+    target: '_blank'
+  },
+  {
     label: 'ConnectFooter.disclaimer',
     to: 'https://www2.gov.bc.ca/gov/content/home/disclaimer',
     target: '_blank'
