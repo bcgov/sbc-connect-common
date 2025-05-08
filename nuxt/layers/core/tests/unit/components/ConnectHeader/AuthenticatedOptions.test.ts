@@ -47,7 +47,7 @@ mockNuxtImport('useConnectNav', () => {
   })
 })
 
-describe.only('<ConnectHeaderAuthenticatedOptions />', () => {
+describe('<ConnectHeaderAuthenticatedOptions />', () => {
   it('renders', async () => {
     const wrapper = await mountSuspended(ConnectHeaderAuthenticatedOptions)
 
