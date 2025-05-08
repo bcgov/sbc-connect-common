@@ -42,6 +42,32 @@ export default defineAppConfig({
       primary: 'blue',
       neutral: 'gray'
     },
+    alert: {
+      slots: {
+        root: 'rounded-sm'
+      }
+    },
+    badge: {
+      variants: {
+        size: {
+          xs: {
+            base: 'rounded-sm'
+          },
+          sm: {
+            base: 'rounded-sm'
+          },
+          md: {
+            base: 'rounded-sm'
+          },
+          lg: {
+            base: 'rounded-sm'
+          },
+          xl: {
+            base: 'rounded-sm'
+          }
+        }
+      }
+    },
     breadcrumb: {
       slots: {
         separatorIcon: 'text-white'
@@ -69,7 +95,7 @@ export default defineAppConfig({
     },
     button: {
       slots: {
-        base: 'cursor-pointer'
+        base: 'cursor-pointer rounded-sm'
       },
       variants: {
         color: {
@@ -110,7 +136,7 @@ export default defineAppConfig({
     },
     dropdownMenu: {
       slots: {
-        content: 'min-w-32 max-h-[75dvh] bg-(--ui-bg) shadow-lg rounded-[calc(var(--ui-radius)*1.5)] ring ring-(--ui-border) divide-y divide-(--ui-border) overflow-y-auto scroll-py-1 data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in]',
+        content: 'min-w-32 max-h-[75dvh] bg-(--ui-bg) shadow-lg rounded-sm ring ring-(--ui-border) divide-y divide-(--ui-border) overflow-y-auto scroll-py-1 data-[state=open]:animate-[scale-in_100ms_ease-out] data-[state=closed]:animate-[scale-out_100ms_ease-in]',
         group: 'p-0 isolate',
         item: 'group relative w-full flex items-center select-none outline-none before:absolute before:z-[-1] before:inset-px before:rounded-none data-disabled:cursor-not-allowed data-disabled:opacity-75 cursor-pointer',
         separator: '-mx-0 my-0 h-px bg-(--ui-border)'
@@ -217,6 +243,11 @@ export default defineAppConfig({
         }
       }
     },
+    popover: {
+      slots: {
+        content: 'rounded-sm'
+      }
+    },
     select: {
       slots: {
         content: 'rounded-sm',
@@ -254,6 +285,9 @@ export default defineAppConfig({
       }
     },
     selectMenu: {
+      slots: {
+        base: 'rounded-sm'
+      },
       variants: {
         size: {
           bcGov: {
@@ -282,6 +316,9 @@ export default defineAppConfig({
         variant: 'bcGov'
       }
     },
+    skeleton: {
+      base: 'rounded-sm'
+    },
     textarea: {
       variants: {
         size: {
@@ -306,7 +343,7 @@ export default defineAppConfig({
     },
     toast: {
       slots: {
-        root: 'bg-bcGovGray-700 ring-bcGovGray-700 ring-none',
+        root: 'bg-bcGovGray-700 ring-bcGovGray-700 ring-none rounded-sm',
         title: 'text-white',
         description: 'text-white',
         progress: 'hidden',
