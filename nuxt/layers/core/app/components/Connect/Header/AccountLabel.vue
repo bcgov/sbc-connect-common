@@ -10,7 +10,7 @@ defineProps({
     <UAvatar
       :text="username[0] ? username[0].toLocaleUpperCase($i18n.locale) : 'U'"
       size="md"
-      class="text-white self-start"
+      class="text-white self-start sm:self-center"
       :ui="{ root: 'bg-blue-300 rounded-none text-lg', fallback: 'text-white font-bold' }"
     />
     <div class="mx-2 flex flex-col text-left font-normal tracking-wide">

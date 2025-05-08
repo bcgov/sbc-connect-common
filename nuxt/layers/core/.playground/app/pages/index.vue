@@ -81,7 +81,9 @@ const value = ref('Backlog')
 
     <ConnectSpinner />
 
-    <UButton label="test 2 page" :to="localePath('/test-2')" />
+    <UBadge label="badge" />
+
+    <UButton size="xl" label="test 2 page" :to="localePath('/test-2')" />
 
     <USelect v-model="value" :items="items" class="w-48" />
 
