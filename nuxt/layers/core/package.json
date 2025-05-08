@@ -4,6 +4,7 @@
   "version": "0.0.25",
   "main": "./nuxt.config.ts",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "nuxi dev .playground --port 3000",
     "dev:prepare": "nuxt prepare .playground",
     "generate": "nuxt generate .playground",
