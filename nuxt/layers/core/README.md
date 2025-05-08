@@ -4,6 +4,7 @@
 
 > [!IMPORTANT]
 > All new projects should use the layer at the [nuxt-v2 branch](https://github.com/bcgov/sbc-connect-common/tree/nuxt-v2).
+
 > This branch only supports: 
    - Nuxt v3.15.4, Nuxt/i18n v8.5.6, due to breaking changes in Nuxt v3.16+
    - Nuxt UI v2.22.0. For Nuxt UI v3+, please use the [nuxt-v2 branch](https://github.com/bcgov/sbc-connect-common/tree/nuxt-v2)
