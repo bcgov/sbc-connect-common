@@ -1,4 +1,5 @@
 import { type ApiError, ErrorCategory } from '#imports'
+import { addToHeaders } from '~/plugins/auth-api'
 /** Manages connect account data */
 export const useConnectAccountStore = defineStore('connect-core-account-store', () => {
   const { $authApi, $keycloak } = useNuxtApp()
@@ -73,11 +74,8 @@ export const useConnectAccountStore = defineStore('connect-core-account-store', 
   async function getAuthUserProfile (identifier: string) {
     const authApiURL = rtc.authApiURL
     try {
-      await updateAuthUserInfo() // update user roles before fetching user info
       const response = await fetch(`${authApiURL}/users/${identifier}`, { // native fetch doesnt break app
-        headers: {
-          Authorization: `Bearer ${$keycloak.token}`
-        }
+        headers: addToHeaders({})
       })
       const data = await response.json()
       if (response.ok) {
@@ -114,7 +112,7 @@ export const useConnectAccountStore = defineStore('connect-core-account-store', 
     if (user.value?.loginSource === LoginSource.BCEID) {
       // get from auth
       const authUserInfo = await getAuthUserProfile('@me')
-      // firstName and lastName dont always exist it seems ?
+      // firstName and lastName dont always exist it seems ?, also response isn't camelcase eg. firstname
       if (authUserInfo.firstName !== undefined && authUserInfo.lastName !== undefined) {
         userFirstName.value = authUserInfo.firstName
         userLastName.value = authUserInfo.lastName
@@ -227,6 +225,7 @@ export const useConnectAccountStore = defineStore('connect-core-account-store', 
 
   async function initAccountStore (): Promise<void> {
     await setAccountInfo() // load user accounts
+    await updateAuthUserInfo()
     await setUserName() // set local name refs from auth api fetch result
     await checkAccountStatus() // redirect user if account status is nsf suspended/suspended/pending review
     if (currentAccount.value.id && kcUser.value.keycloakGuid) { // check for pending approvals
