@@ -8,26 +8,8 @@ export default defineNuxtPlugin(() => {
   const api = $fetch.create({
     baseURL: authApiUrl,
     onRequest ({ options }) {
-      const headers = options.headers ||= {} as Headers
-      const bearerToken = `Bearer ${$keycloak.token}`
-      if (Array.isArray(headers)) {
-        headers.push(['Authorization', bearerToken])
-        if (authApiKey) {
-          headers.push(['x-apikey', authApiKey])
-        }
-      } else if (headers instanceof Headers) {
-        headers.set('Authorization', bearerToken)
-        if (authApiKey) {
-          headers.set('x-apikey', authApiKey)
-        }
-      } else {
-        // @ts-expect-error - 'Authorization' doesnt exist on type Headers
-        headers.Authorization = bearerToken
-        if (authApiKey) {
-          // @ts-expect-error - 'Authorization' doesnt exist on type Headers
-          headers['x-apikey'] = authApiKey
-        }
-      }
+      let headers = options.headers ||= {} as Headers
+      headers = addToHeaders(headers)
     },
     async onResponseError ({ response }) {
       if (response.status === 401) {
@@ -42,3 +24,26 @@ export default defineNuxtPlugin(() => {
     }
   }
 })
+
+export const addToHeaders = (headers: any) => {
+  const { $keycloak } = useNuxtApp()
+  const authApiKey = useRuntimeConfig().public.authApiKey
+  const bearerToken = `Bearer ${$keycloak.token}`
+  if (Array.isArray(headers)) {
+    headers.push(['Authorization', bearerToken])
+    if (authApiKey) {
+      headers.push(['x-apikey', authApiKey])
+    }
+  } else if (headers instanceof Headers) {
+    headers.set('Authorization', bearerToken)
+    if (authApiKey) {
+      headers.set('x-apikey', authApiKey)
+    }
+  } else {
+    headers.Authorization = bearerToken
+    if (authApiKey) {
+      headers['x-apikey'] = authApiKey
+    }
+  }
+  return headers
+}
