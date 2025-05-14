@@ -112,10 +112,10 @@ export const useConnectAccountStore = defineStore('connect-core-account-store', 
     if (user.value?.loginSource === LoginSource.BCEID) {
       // get from auth
       const authUserInfo = await getAuthUserProfile('@me')
-      // firstName and lastName dont always exist it seems ?
-      if (authUserInfo.firstname !== undefined && authUserInfo.lastname !== undefined) {
-        userFirstName.value = authUserInfo.firstname
-        userLastName.value = authUserInfo.lastname
+      // firstName and lastName dont always exist it seems ?, also response isn't camelcase eg. firstname
+      if (authUserInfo.firstName !== undefined && authUserInfo.lastName !== undefined) {
+        userFirstName.value = authUserInfo.firstName
+        userLastName.value = authUserInfo.lastName
       }
       return
     }
