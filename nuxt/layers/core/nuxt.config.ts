@@ -29,7 +29,6 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/ui',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
     // '@nuxt/test-utils/module'
@@ -66,11 +65,6 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['keycloak-js']
-    },
-    server: {
-      watch: {
-        usePolling: true
-      }
     }
   },
 
@@ -99,28 +93,27 @@ export default defineNuxtConfig({
   },
 
   i18n: {
+    defaultLocale: 'en-CA',
+    detectBrowserLanguage: false,
+    langDir: 'locales',
+    baseUrl: process.env.NUXT_BASE_URL || 'http://localhost:3000/',
     locales: [
       {
         name: 'English',
         code: 'en-CA',
-        iso: 'en-CA',
+        language: 'en-CA',
         dir: 'ltr',
         file: 'en-CA.ts'
       },
       {
         name: 'Français',
         code: 'fr-CA',
-        iso: 'fr-CA',
+        language: 'fr-CA',
         dir: 'ltr',
         file: 'fr-CA.ts'
       }
     ],
-    strategy: 'prefix',
-    lazy: true,
-    langDir: 'locales',
-    defaultLocale: 'en-CA',
-    detectBrowserLanguage: false,
-    vueI18n: './i18n.config.ts'
+    strategy: 'prefix'
   },
 
   piniaPluginPersistedstate: {
