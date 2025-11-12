@@ -1,7 +1,7 @@
 {
   "name": "@daxiom/nuxt-core-layer-test",
   "type": "module",
-  "version": "0.0.26",
+  "version": "0.0.28",
   "main": "./nuxt.config.ts",
   "scripts": {
     "preinstall": "npx only-allow pnpm",

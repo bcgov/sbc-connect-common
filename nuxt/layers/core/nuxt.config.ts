@@ -31,6 +31,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxtjs/i18n',
     '@vueuse/nuxt',
+    'pinia-plugin-persistedstate/nuxt'
     // '@nuxt/test-utils/module'
   ],
 
