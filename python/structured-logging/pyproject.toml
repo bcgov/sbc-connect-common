@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "structured-logging"
-version = "0.4.0"
+version = "0.4.1"
 description = ""
 authors = ["thorwolpert <thor@wolpert.ca>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ packages = [{include = "structured_logging", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.9"
 structlog = "^24.1.0"
-flask = ">= 1"
+flask = ">=3.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
