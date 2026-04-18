@@ -6,8 +6,9 @@ authors = ["Andriy Bolyachevets <andriy.Bolyachevets@gov.bc.ca>"]
 readme = "README.md"
 packages = [{include = "cloud_sql_connector", from = "src"}]
 
+
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.9"
 cloud-sql-python-connector = "^1.16.0"
 sqlalchemy = "^2.0.0"
 pg8000 = "^1.30.0"
