@@ -11,22 +11,32 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Cloud SQL connection utilities for the Notify API service."""
 
+# Cloud SQL connection utilities (IAM-safe, Python 3.9+ stable)
+
+import os
 import threading
-import time
 from dataclasses import dataclass
 
 from google.cloud.sql.connector import Connector
 from sqlalchemy import event
 
+# -------------------------------------------------------------------
+# Global state (process-safe, not thread-safe across forks)
+# -------------------------------------------------------------------
+
 _connector = None
+_connector_pid = None
 _lock = threading.Lock()
+_connect_lock = threading.Lock()
+
+
+# -------------------------------------------------------------------
+# Configuration
+# -------------------------------------------------------------------
 
 @dataclass
 class DBConfig:
-    """Database configuration settings."""
-
     instance_name: str
     database: str
     user: str
@@ -35,7 +45,6 @@ class DBConfig:
     enable_iam_auth: bool = True
     driver: str = "pg8000"
 
-    # Connection pool parameters
     pool_size: int = 5
     max_overflow: int = 2
     pool_timeout: int = 10
@@ -45,16 +54,10 @@ class DBConfig:
     connect_args: dict = None
 
     def __post_init__(self):
-        """Initialize default connect_args if not provided."""
         if self.connect_args is None:
             self.connect_args = {}
 
-    def get_engine_options(self) -> dict:
-        """Get SQLAlchemy engine options for this configuration.
-
-        Returns:
-            dict: Dictionary of engine options suitable for SQLAlchemy create_engine()
-        """
+    def get_engine_options(self):
         return {
             "creator": lambda: getconn(self),
             "pool_size": self.pool_size,
@@ -67,70 +70,67 @@ class DBConfig:
         }
 
 
+# -------------------------------------------------------------------
+# Connector (safe for Gunicorn + IAM)
+# -------------------------------------------------------------------
+
 def _get_connector() -> Connector:
-    """Get the singleton connector instance with lazy initialization.
-    
-    Returns:
-        Connector: The singleton connector instance
     """
-    global _connector
-    
-    if _connector is None:
+    Process-safe singleton connector.
+    Prevents fork-related asyncio/event loop corruption in Python 3.9.
+    """
+    global _connector, _connector_pid
+
+    pid = os.getpid()
+
+    if _connector is None or _connector_pid != pid:
         with _lock:
-            if _connector is None:
-                _connector = Connector(refresh_strategy="lazy")
-    
+            pid = os.getpid()
+            if _connector is None or _connector_pid != pid:
+                _connector = Connector(refresh_strategy="background")
+                _connector_pid = pid
+
     return _connector
 
 
-def getconn(db_config: DBConfig) -> object:
-    """Create a database connection.
+# -------------------------------------------------------------------
+# Connection factory
+# -------------------------------------------------------------------
 
-    Args:
-        db_config (DBConfig): The database configuration.
-
-    Returns:
-        object: A connection object to the database.
+def getconn(db_config: DBConfig):
     """
-    for attempt in range(3):
-        try:
-            connector = _get_connector()
-            conn = connector.connect(
-                instance_connection_string=db_config.instance_name,
-                db=db_config.database,
-                user=db_config.user,
-                ip_type=db_config.ip_type,
-                driver=db_config.driver,
-                enable_iam_auth=db_config.enable_iam_auth,
-            )
+    Create a new DB connection using Cloud SQL IAM auth.
+    Safe under Gunicorn concurrency.
+    """
 
-            if db_config.schema:
-                cursor = conn.cursor()
-                cursor.execute(f"SET search_path TO {db_config.schema},public")
-                cursor.execute(f"SET LOCAL search_path TO {db_config.schema}, public;")
-                cursor.close()
+    connector = _get_connector()
 
-            return conn
+    # Prevent IAM/token refresh stampede under load
+    with _connect_lock:
+        conn = connector.connect(
+            instance_connection_string=db_config.instance_name,
+            db=db_config.database,
+            user=db_config.user,
+            ip_type=db_config.ip_type,
+            driver=db_config.driver,
+            enable_iam_auth=db_config.enable_iam_auth,
+        )
 
-        except PermissionError as e:
-            if attempt < 2:
-                time.sleep(1)
-                continue
-            raise
+    return conn
 
 
-def setup_search_path_event_listener(engine, schema):
-    """Set up an event listener to set the search path for a database connection.
+# -------------------------------------------------------------------
+# SQLAlchemy event: set schema per connection
+# -------------------------------------------------------------------
 
-    Args:
-        engine: The SQLAlchemy engine object
-        schema: The database schema name to use
+def setup_search_path_event_listener(engine, schema: str):
+    """
+    Ensures schema is set consistently per checkout.
+    Avoids doing SET search_path inside getconn (cleaner + safer).
     """
 
     @event.listens_for(engine, "checkout")
-    def set_search_path_on_checkout(
-        dbapi_connection, connection_record, connection_proxy
-    ):
+    def set_search_path(dbapi_connection, connection_record, connection_proxy):
         cursor = dbapi_connection.cursor()
-        cursor.execute(f"SET search_path TO {schema},public")
+        cursor.execute(f"SET search_path TO {schema}, public")
         cursor.close()
