@@ -87,14 +87,20 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 
 ## Development
 
+### Setup
+
+```bash
+uv sync
+```
+
 ### Running tests
 
 ```bash
-poetry run pytest tests/unit/ -v
+uv run pytest tests/unit/ -v
 ```
 
 ### With coverage
 
 ```bash
-poetry run pytest tests/unit/ --cov=src --cov-report=term-missing
+uv run pytest tests/unit/ --cov=src --cov-report=term-missing
 ```
