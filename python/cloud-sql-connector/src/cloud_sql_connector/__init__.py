@@ -13,6 +13,6 @@
 # limitations under the License.
 """This module provides Cloud SQL connection utilities and database configuration helpers."""
 
-from .connector import DBConfig, getconn, setup_search_path_event_listener
+from .connector import DBConfig, getconn, setup_pg8000_close_event_listener, setup_search_path_event_listener
 
-__all__ = ["DBConfig", "getconn", "setup_search_path_event_listener"]
+__all__ = ["DBConfig", "getconn", "setup_pg8000_close_event_listener", "setup_search_path_event_listener"]

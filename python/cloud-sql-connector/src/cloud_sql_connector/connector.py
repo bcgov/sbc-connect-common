@@ -134,3 +134,40 @@ def setup_search_path_event_listener(engine, schema: str):
         cursor = dbapi_connection.cursor()
         cursor.execute(f"SET search_path TO {schema}, public")
         cursor.close()
+
+
+# -------------------------------------------------------------------
+# SQLAlchemy event: suppress pg8000 InterfaceError on close
+# -------------------------------------------------------------------
+
+def setup_pg8000_close_event_listener(engine):
+    """
+    Wraps each pg8000 connection's close() to suppress InterfaceError
+    during Cloud Run scale-down when sockets are already severed.
+    """
+    if getattr(engine, "driver", None) != "pg8000":
+        return
+
+    import logging
+
+    try:
+        from pg8000.exceptions import InterfaceError
+    except ImportError:
+        InterfaceError = None
+
+    @event.listens_for(engine, "connect")
+    def on_connect(dbapi_conn, _connection_record):
+        original_close = dbapi_conn.close
+
+        def safe_close():
+            try:
+                original_close()
+            except Exception as e:
+                if InterfaceError and isinstance(e, InterfaceError):
+                    logging.getLogger(__name__).debug(
+                        "Suppressed pg8000 InterfaceError on connection close during teardown."
+                    )
+                else:
+                    raise
+
+        dbapi_conn.close = safe_close
