@@ -67,9 +67,11 @@ class GcpTracing:
         RequestsInstrumentor().instrument()
 
         @app.before_request
-        def attach_frontend_trace_id():
-            registries_trace_id = request.headers.get("registries-trace-id")
-            if registries_trace_id:
-                span = trace.get_current_span()
-                if span.is_recording():
-                    span.set_attribute("app.registries_trace_id", registries_trace_id)
+        def attach_request_trace_attributes():
+            span = trace.get_current_span()
+            if not span.is_recording():
+                return
+            if registries_trace_id := request.headers.get("registries-trace-id"):
+                span.set_attribute("app.registries_trace_id", registries_trace_id)
+            if account_id := request.headers.get("Account-Id"):
+                span.set_attribute("app.account_id", account_id)
