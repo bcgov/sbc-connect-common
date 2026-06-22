@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "cloud-sql-connector"
-version = "0.2.3"
+version = "0.3.0"
 description = "Cloud SQL connection utilities for database connectivity with authentication and schema management"
 authors = ["Andriy Bolyachevets <andriy.Bolyachevets@gov.bc.ca>"]
 readme = "README.md"
 packages = [{include = "cloud_sql_connector", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.12"
-cloud-sql-python-connector = "^1.16.0"
+python = ">=3.12,<3.14"
+cloud-sql-python-connector = "^1.20.3"
 sqlalchemy = "^2.0.0"
 pg8000 = "^1.30.0"
 
