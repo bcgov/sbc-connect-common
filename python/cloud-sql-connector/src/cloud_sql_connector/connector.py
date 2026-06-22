@@ -84,6 +84,19 @@ def _get_connector() -> Connector:
     return _connector
 
 
+def init_connector() -> Connector:
+    """Eagerly initialize the singleton connector.
+
+    Call this at application startup (before gunicorn forks worker threads) so the
+    background asyncio event loop is created in a controlled context rather than
+    lazily inside a worker thread, which can deadlock on Python 3.13+.
+
+    Returns:
+        Connector: The initialized singleton connector instance
+    """
+    return _get_connector()
+
+
 def close_connector() -> None:
     """Close and clear the singleton connector instance."""
     global _connector

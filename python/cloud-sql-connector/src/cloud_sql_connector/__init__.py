@@ -17,6 +17,7 @@ from .connector import (
     DBConfig,
     close_connector,
     getconn,
+    init_connector,
     setup_pg8000_close_event_listener,
     setup_search_path_event_listener,
 )
@@ -25,6 +26,7 @@ __all__ = [
     "DBConfig",
     "close_connector",
     "getconn",
+    "init_connector",
     "setup_pg8000_close_event_listener",
     "setup_search_path_event_listener",
 ]
