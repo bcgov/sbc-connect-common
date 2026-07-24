@@ -13,15 +13,22 @@
 # limitations under the License.
 """Cloud SQL connection utilities for the Notify API service."""
 
+import os
 import threading
 import time
 from dataclasses import dataclass
+from typing import Mapping
 
 from google.cloud.sql.connector import Connector
 from sqlalchemy import event
 
 _connector = None
 _lock = threading.Lock()
+_CLOUDSQL_REQUIRED_ENV_VARS = (
+    "CLOUDSQL_INSTANCE_CONNECTION_NAME",
+    "DATABASE_NAME",
+    "DATABASE_USERNAME",
+)
 
 
 @dataclass
@@ -66,6 +73,69 @@ class DBConfig:
             "pool_use_lifo": self.pool_use_lifo,
             "connect_args": self.connect_args,
         }
+
+
+def database_uri_from_env(
+    env: Mapping[str, str] | None = None,
+    *,
+    username_env: str = "DATABASE_USERNAME",
+    password_env: str = "DATABASE_PASSWORD",
+    name_env: str = "DATABASE_NAME",
+    host_env: str = "DATABASE_HOST",
+    port_env: str = "DATABASE_PORT",
+) -> str:
+    """Build a local pg8000 SQLAlchemy URI from environment variables."""
+    values = env if env is not None else os.environ
+    db_user = values.get(username_env, "")
+    db_password = values.get(password_env, "")
+    db_name = values.get(name_env, "")
+    db_host = values.get(host_env, "")
+    db_port = values.get(port_env, "5432")
+
+    if db_unix_socket := values.get("DATABASE_UNIX_SOCKET"):
+        return (
+            f"postgresql+pg8000://{db_user}:{db_password}@/{db_name}"
+            f"?unix_sock={db_unix_socket}/.s.PGSQL.5432"
+        )
+
+    return (
+        f"postgresql+pg8000://{db_user}:{db_password}@" f"{db_host}:{db_port}/{db_name}"
+    )
+
+
+def sqlalchemy_settings_from_env(
+    env: Mapping[str, str] | None = None,
+    *,
+    schema: str = "",
+) -> tuple[str, dict]:
+    """Build SQLAlchemy URI and engine options for local or Cloud SQL IAM use."""
+    values = env if env is not None else os.environ
+    use_cloudsql_iam = bool(
+        values.get("CLOUDSQL_INSTANCE_CONNECTION_NAME")
+        or values.get("K_SERVICE")
+        or values.get("CLOUD_RUN_JOB")
+    )
+    if not use_cloudsql_iam:
+        return database_uri_from_env(values), {}
+
+    missing = [name for name in _CLOUDSQL_REQUIRED_ENV_VARS if not values.get(name)]
+    if missing:
+        raise RuntimeError(
+            f"Missing Cloud SQL IAM environment variables: {', '.join(missing)}"
+        )
+
+    ip_type = values.get("CLOUDSQL_IP_TYPE", "PUBLIC").upper()
+    if ip_type not in ("PUBLIC", "PRIVATE"):
+        raise RuntimeError("CLOUDSQL_IP_TYPE must be PUBLIC or PRIVATE")
+
+    config = DBConfig(
+        instance_name=values["CLOUDSQL_INSTANCE_CONNECTION_NAME"],
+        database=values["DATABASE_NAME"],
+        user=values["DATABASE_USERNAME"],
+        ip_type=ip_type,
+        schema=schema,
+    )
+    return "postgresql+pg8000://", {"creator": lambda: getconn(config)}
 
 
 def _get_connector() -> Connector:
