@@ -21,7 +21,9 @@ import pytest
 from cloud_sql_connector.connector import (
     DBConfig,
     close_connector,
+    database_uri_from_env,
     getconn,
+    sqlalchemy_settings_from_env,
     setup_pg8000_close_event_listener,
     setup_search_path_event_listener,
 )
@@ -57,6 +59,146 @@ class TestDBConfig:
         )
 
         assert config.schema == ""
+
+
+class TestEnvironmentSettings:
+    """Test SQLAlchemy configuration derived from environment values."""
+
+    def test_database_uri(self):
+        """Build a TCP URI for local development."""
+        uri = database_uri_from_env(
+            {
+                "DATABASE_USERNAME": "user",
+                "DATABASE_PASSWORD": "password",
+                "DATABASE_NAME": "database",
+                "DATABASE_HOST": "localhost",
+                "DATABASE_PORT": "5433",
+            }
+        )
+
+        assert uri == "postgresql+pg8000://user:password@localhost:5433/database"
+
+    def test_database_uri_with_unix_socket(self):
+        """Build a Unix socket URI when configured."""
+        uri = database_uri_from_env(
+            {
+                "DATABASE_USERNAME": "user",
+                "DATABASE_PASSWORD": "password",
+                "DATABASE_NAME": "database",
+                "DATABASE_UNIX_SOCKET": "/cloudsql/instance",
+            }
+        )
+
+        assert (
+            uri == "postgresql+pg8000://user:password@/database"
+            "?unix_sock=/cloudsql/instance/.s.PGSQL.5432"
+        )
+
+    def test_local_sqlalchemy_settings(self):
+        """Use a standard URI and no engine options locally."""
+        uri, engine_options = sqlalchemy_settings_from_env(
+            {
+                "DATABASE_USERNAME": "user",
+                "DATABASE_PASSWORD": "password",
+                "DATABASE_NAME": "database",
+                "DATABASE_HOST": "localhost",
+            }
+        )
+
+        assert uri == "postgresql+pg8000://user:password@localhost:5432/database"
+        assert engine_options == {}
+
+    @patch("cloud_sql_connector.connector.getconn")
+    def test_cloud_sqlalchemy_settings(self, mock_getconn):
+        """Use a connection creator for deployed Cloud SQL IAM access."""
+        uri, engine_options = sqlalchemy_settings_from_env(
+            {
+                "K_SERVICE": "service",
+                "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                "DATABASE_NAME": "database",
+                "DATABASE_USERNAME": "service-account",
+                "CLOUDSQL_IP_TYPE": "private",
+            }
+        )
+
+        assert uri == "postgresql+pg8000://"
+        engine_options["creator"]()
+        assert mock_getconn.call_args.args[0] == DBConfig(
+            instance_name="project:region:instance",
+            database="database",
+            user="service-account",
+            ip_type="PRIVATE",
+            schema="",
+        )
+
+    @patch("cloud_sql_connector.connector.getconn")
+    def test_cloud_sqlalchemy_settings_with_custom_iam_username(self, mock_getconn):
+        """Use the requested IAM username without falling back to legacy values."""
+        uri, engine_options = sqlalchemy_settings_from_env(
+            {
+                "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                "DATABASE_NAME": "database",
+                "DATABASE_MIGRATION_USERNAME": "migration-service-account",
+                "DATABASE_USERNAME": "legacy-user",
+                "DATABASE_PASSWORD": "legacy-password",
+                "DATABASE_HOST": "legacy-host",
+                "DATABASE_UNIX_SOCKET": "/cloudsql/legacy-instance",
+            },
+            iam_username_env="DATABASE_MIGRATION_USERNAME",
+        )
+
+        assert uri == "postgresql+pg8000://"
+        engine_options["creator"]()
+        assert mock_getconn.call_args.args[0] == DBConfig(
+            instance_name="project:region:instance",
+            database="database",
+            user="migration-service-account",
+            ip_type="PUBLIC",
+            schema="",
+        )
+
+    def test_cloud_sqlalchemy_settings_require_values(self):
+        """Report every required Cloud SQL IAM value that is absent."""
+        with pytest.raises(
+            RuntimeError,
+            match=(
+                "Missing Cloud SQL IAM environment variables: "
+                "CLOUDSQL_INSTANCE_CONNECTION_NAME, DATABASE_NAME, DATABASE_USERNAME"
+            ),
+        ):
+            sqlalchemy_settings_from_env({"K_SERVICE": "service"})
+
+    def test_cloud_sqlalchemy_settings_require_custom_iam_username(self):
+        """Name the configured IAM username variable when it is absent."""
+        with pytest.raises(
+            RuntimeError,
+            match=(
+                "Missing Cloud SQL IAM environment variables: "
+                "DATABASE_MIGRATION_USERNAME"
+            ),
+        ):
+            sqlalchemy_settings_from_env(
+                {
+                    "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                    "DATABASE_NAME": "database",
+                    "DATABASE_USERNAME": "application-service-account",
+                },
+                iam_username_env="DATABASE_MIGRATION_USERNAME",
+            )
+
+    def test_cloud_sqlalchemy_settings_validate_ip_type(self):
+        """Reject connector IP types other than public and private."""
+        with pytest.raises(
+            RuntimeError, match="CLOUDSQL_IP_TYPE must be PUBLIC or PRIVATE"
+        ):
+            sqlalchemy_settings_from_env(
+                {
+                    "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                    "DATABASE_NAME": "database",
+                    "DATABASE_USERNAME": "service-account",
+                    "CLOUDSQL_IP_TYPE": "invalid",
+                }
+            )
 
 
 class TestGetconn:

@@ -40,6 +40,36 @@ from sqlalchemy import create_engine
 engine = create_engine("postgresql+pg8000://", creator=lambda: getconn(config))
 ```
 
+### Environment-based SQLAlchemy Settings
+
+```python
+from cloud_sql_connector import database_uri_from_env, sqlalchemy_settings_from_env
+
+local_uri = database_uri_from_env()
+database_uri, engine_options = sqlalchemy_settings_from_env()
+```
+
+`database_uri_from_env()` builds a local pg8000 URI from the standard
+`DATABASE_*` variables, using `DATABASE_UNIX_SOCKET` when present. Its keyword
+arguments can select alternate variable names, such as test database settings.
+
+`sqlalchemy_settings_from_env()` returns the database URI and SQLAlchemy engine
+options. It uses the local URI unless `CLOUDSQL_INSTANCE_CONNECTION_NAME`,
+`K_SERVICE`, or `CLOUD_RUN_JOB` is set. In Cloud Run IAM mode,
+`CLOUDSQL_INSTANCE_CONNECTION_NAME`, `DATABASE_NAME`, and the selected username
+variable are required; `CLOUDSQL_IP_TYPE` defaults to `PUBLIC`. IAM mode takes
+precedence over retained `DATABASE_PASSWORD`, `DATABASE_HOST`, `DATABASE_PORT`,
+and `DATABASE_UNIX_SOCKET` values.
+
+For a migration identity stored under a different variable name, select it
+explicitly:
+
+```python
+database_uri, engine_options = sqlalchemy_settings_from_env(
+    iam_username_env="DATABASE_MIGRATION_USERNAME"
+)
+```
+
 ## Configuration
 
 The `DBConfig` dataclass accepts the following parameters:
