@@ -131,6 +131,32 @@ class TestEnvironmentSettings:
             schema="",
         )
 
+    @patch("cloud_sql_connector.connector.getconn")
+    def test_cloud_sqlalchemy_settings_with_custom_iam_username(self, mock_getconn):
+        """Use the requested IAM username without falling back to legacy values."""
+        uri, engine_options = sqlalchemy_settings_from_env(
+            {
+                "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                "DATABASE_NAME": "database",
+                "DATABASE_MIGRATION_USERNAME": "migration-service-account",
+                "DATABASE_USERNAME": "legacy-user",
+                "DATABASE_PASSWORD": "legacy-password",
+                "DATABASE_HOST": "legacy-host",
+                "DATABASE_UNIX_SOCKET": "/cloudsql/legacy-instance",
+            },
+            iam_username_env="DATABASE_MIGRATION_USERNAME",
+        )
+
+        assert uri == "postgresql+pg8000://"
+        engine_options["creator"]()
+        assert mock_getconn.call_args.args[0] == DBConfig(
+            instance_name="project:region:instance",
+            database="database",
+            user="migration-service-account",
+            ip_type="PUBLIC",
+            schema="",
+        )
+
     def test_cloud_sqlalchemy_settings_require_values(self):
         """Report every required Cloud SQL IAM value that is absent."""
         with pytest.raises(
@@ -141,6 +167,24 @@ class TestEnvironmentSettings:
             ),
         ):
             sqlalchemy_settings_from_env({"K_SERVICE": "service"})
+
+    def test_cloud_sqlalchemy_settings_require_custom_iam_username(self):
+        """Name the configured IAM username variable when it is absent."""
+        with pytest.raises(
+            RuntimeError,
+            match=(
+                "Missing Cloud SQL IAM environment variables: "
+                "DATABASE_MIGRATION_USERNAME"
+            ),
+        ):
+            sqlalchemy_settings_from_env(
+                {
+                    "CLOUDSQL_INSTANCE_CONNECTION_NAME": "project:region:instance",
+                    "DATABASE_NAME": "database",
+                    "DATABASE_USERNAME": "application-service-account",
+                },
+                iam_username_env="DATABASE_MIGRATION_USERNAME",
+            )
 
     def test_cloud_sqlalchemy_settings_validate_ip_type(self):
         """Reject connector IP types other than public and private."""

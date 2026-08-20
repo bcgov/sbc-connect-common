@@ -27,7 +27,6 @@ _lock = threading.Lock()
 _CLOUDSQL_REQUIRED_ENV_VARS = (
     "CLOUDSQL_INSTANCE_CONNECTION_NAME",
     "DATABASE_NAME",
-    "DATABASE_USERNAME",
 )
 
 
@@ -107,6 +106,7 @@ def sqlalchemy_settings_from_env(
     env: Mapping[str, str] | None = None,
     *,
     schema: str = "",
+    iam_username_env: str = "DATABASE_USERNAME",
 ) -> tuple[str, dict]:
     """Build SQLAlchemy URI and engine options for local or Cloud SQL IAM use."""
     values = env if env is not None else os.environ
@@ -118,7 +118,8 @@ def sqlalchemy_settings_from_env(
     if not use_cloudsql_iam:
         return database_uri_from_env(values), {}
 
-    missing = [name for name in _CLOUDSQL_REQUIRED_ENV_VARS if not values.get(name)]
+    required = (*_CLOUDSQL_REQUIRED_ENV_VARS, iam_username_env)
+    missing = [name for name in required if not values.get(name)]
     if missing:
         raise RuntimeError(
             f"Missing Cloud SQL IAM environment variables: {', '.join(missing)}"
@@ -131,7 +132,7 @@ def sqlalchemy_settings_from_env(
     config = DBConfig(
         instance_name=values["CLOUDSQL_INSTANCE_CONNECTION_NAME"],
         database=values["DATABASE_NAME"],
-        user=values["DATABASE_USERNAME"],
+        user=values[iam_username_env],
         ip_type=ip_type,
         schema=schema,
     )
