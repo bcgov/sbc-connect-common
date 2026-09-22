@@ -16,7 +16,9 @@
 from .connector import (
     DBConfig,
     close_connector,
+    database_uri_from_env,
     getconn,
+    sqlalchemy_settings_from_env,
     setup_pg8000_close_event_listener,
     setup_search_path_event_listener,
 )
@@ -24,7 +26,9 @@ from .connector import (
 __all__ = [
     "DBConfig",
     "close_connector",
+    "database_uri_from_env",
     "getconn",
+    "sqlalchemy_settings_from_env",
     "setup_pg8000_close_event_listener",
     "setup_search_path_event_listener",
 ]
