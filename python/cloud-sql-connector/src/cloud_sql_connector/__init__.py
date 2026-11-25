@@ -15,6 +15,7 @@
 
 from .connector import (
     DBConfig,
+    TCPDBConfig,
     close_connector,
     getconn,
     setup_pg8000_close_event_listener,
@@ -23,6 +24,7 @@ from .connector import (
 
 __all__ = [
     "DBConfig",
+    "TCPDBConfig",
     "close_connector",
     "getconn",
     "setup_pg8000_close_event_listener",
