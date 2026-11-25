@@ -64,13 +64,9 @@ For proxy-managed IAM authentication, start the Cloud SQL Auth Proxy with `--aut
 
 With `enable_iam_auth=False`, a database password can instead be supplied through `connect_args` when the endpoint requires one.
 
-For application-managed IAM authentication through a TCP tunnel, set
-`enable_iam_auth=True` on `TCPDBConfig`. The library obtains a token from
-Application Default Credentials (ADC) and refreshes it when needed before
-opening a connection. Do not supply a password in `connect_args` in this mode. The database user must match the application's Google identity and have Cloud SQL IAM login permission and database privileges. For PostgreSQL service accounts, omit `.gserviceaccount.com` from the database user name.
+For application-managed IAM authentication through a TCP tunnel, set `enable_iam_auth=True` on `TCPDBConfig`. The library obtains a token from Application Default Credentials (ADC) and refreshes it when needed before opening a connection. Do not supply a password in `connect_args` in this mode. The database user must match the application's Google identity and have Cloud SQL IAM login permission and database privileges. For PostgreSQL service accounts, omit `.gserviceaccount.com` from the database user name.
 
-Set `credentials_file` to a trusted Google credentials or workload identity federation configuration file to use a specific identity instead of default ADC.
-For file-based federation, the external subject token must also be kept valid: refreshing a Google access token cannot renew a subject token written only once by an init container. This library does not manage that external token or the tunnel. Ensure the proxy is configured to pass through application credentials rather than automatically using the VM's IAM identity.
+Set `credentials_file` to a trusted Google credentials or workload identity federation configuration file to use a specific identity instead of default ADC. For file-based federation, the external subject token must also be kept valid: refreshing a Google access token cannot renew a subject token written only once by an init container. This library does not manage that external token or the tunnel. Ensure the proxy is configured to pass through application credentials rather than automatically using the VM's IAM identity.
 
 ## Configuration
 
@@ -83,10 +79,7 @@ The `DBConfig` dataclass accepts the following parameters:
 - `schema`: Database schema (optional)
 - `driver`: Database driver (optional - defaults to pg8000)
 
-The `TCPDBConfig` dataclass accepts `host` (default `127.0.0.1`), `port` (default
-`5432`), `database`, `user`, and optional `schema` and `connect_args` values.
-`enable_iam_auth` defaults to `False`; `credentials_file` is optional and
-requires IAM authentication to be enabled.
+The `TCPDBConfig` dataclass accepts `host` (default `127.0.0.1`), `port` (default `5432`), `database`, `user`, and optional `schema` and `connect_args` values. `enable_iam_auth` defaults to `False`; `credentials_file` is optional and requires IAM authentication to be enabled.
 
 For either configuration, `schema` is a single PostgreSQL schema name and is
 case-sensitive. Use the actual name without adding SQL identifier quotes.
