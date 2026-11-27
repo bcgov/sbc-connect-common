@@ -132,15 +132,9 @@ set -a; source .env; set +a && poetry run pytest tests/integration/ -v
 The local TCP integration tests are skipped unless `CLOUD_SQL_TCP_PORT` is set.
 Configure `CLOUD_SQL_TCP_HOST` (default `127.0.0.1`), `CLOUD_SQL_TCP_DATABASE`, `CLOUD_SQL_TCP_USER`, and optionally `CLOUD_SQL_TCP_SCHEMA` and `CLOUD_SQL_TCP_PASSWORD`. Start the local endpoint before running the tests. For proxy-based IAM authentication, the proxy must be configured for automatic IAM database authentication and have access to Google credentials through ADC or `GOOGLE_APPLICATION_CREDENTIALS`.
 
-To test application-managed IAM, set `CLOUD_SQL_TCP_IAM_AUTH=true` and unset
-`CLOUD_SQL_TCP_PASSWORD`. Optionally set `CLOUD_SQL_TCP_CREDENTIALS_FILE` to a
-specific credentials configuration; otherwise ADC is used. The database user
-must match the Google identity used by the application. ADC may use a different
-identity from `gcloud auth print-access-token`.
+To test application-managed IAM, set `CLOUD_SQL_TCP_IAM_AUTH=true` and unset `CLOUD_SQL_TCP_PASSWORD`. Optionally set `CLOUD_SQL_TCP_CREDENTIALS_FILE` to a specific credentials configuration; otherwise ADC is used. The database user must match the Google identity used by the application. ADC may use a different identity from `gcloud auth print-access-token`.
 
-The `test_iam_token_refresh` integration test forces the cached token to expire,
-then verifies refresh and reconnection. Run it with the same application-managed
-IAM settings and a proxy that passes through application credentials:
+The `test_iam_token_refresh` integration test forces the cached token to expire, then verifies refresh and reconnection. Run it with the same application-managed IAM settings and a proxy that passes through application credentials:
 
 ```bash
 unset CLOUD_SQL_TCP_PASSWORD
