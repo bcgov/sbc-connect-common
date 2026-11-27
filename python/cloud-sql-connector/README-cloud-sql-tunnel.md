@@ -139,7 +139,11 @@ DATABASE_TCP_IAM_AUTH variable may need to be introduced for backward compatibil
 ```python
       connection_name = app.config.get("DATABASE_CONNECTION_NAME")
       db_host = app.config.get("DATABASE_HOST")
-      if connection_name and app.config.get("DATABASE_TCP_IAM_AUTH", False):
+      iam_auth_value = str(app.config.get("DATABASE_TCP_IAM_AUTH", False)).strip().lower()
+      if iam_auth_value not in ("true", "false"):
+          raise ValueError("DATABASE_TCP_IAM_AUTH must be true or false")
+      tcp_iam_auth = iam_auth_value == "true"
+      if connection_name and tcp_iam_auth:
           raise ValueError("DATABASE_TCP_IAM_AUTH requires DATABASE_CONNECTION_NAME to be unset")
       if connection_name:
           db_config = DBConfig(
@@ -150,7 +154,7 @@ DATABASE_TCP_IAM_AUTH variable may need to be introduced for backward compatibil
               enable_iam_auth=True,
               schema=app.config.get("DATABASE_SCHEMA", ""),
           )
-      elif db_host and app.config.get("DATABASE_TCP_IAM_AUTH", False):
+      elif db_host and tcp_iam_auth:
           db_config = TCPDBConfig(
               database=app.config["DATABASE_NAME"],
               user=app.config["DATABASE_USERNAME"],
@@ -169,6 +173,7 @@ DATABASE_TCP_IAM_AUTH variable may need to be introduced for backward compatibil
               connect_args={"password": app.config["DATABASE_PASSWORD"]},
               host=db_host,
               port=int(app.config["DATABASE_PORT"]),
+              schema=app.config.get("DATABASE_SCHEMA", ""),
           )
       else:
           raise ValueError(
