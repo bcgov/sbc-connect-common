@@ -49,10 +49,6 @@ setup, the application supplies its own IAM token and database username and
 requires Cloud SQL IAM login permission and the appropriate SQL grants. The
 proxy does not run with `--auto-iam-authn`.
 
-Both Cloud SQL targets illustrate the architecture, not the single-instance
-proxy command below. To reach multiple instances, configure proxy listeners for
-each target and corresponding tunnel ports.
-
 ## IAP and IAM prerequisites
 
 Enable the Identity-Aware Proxy API in the VM project:
@@ -128,6 +124,7 @@ Where we can connect to it locally via:
 LOCAL_PORT=5433
 DATABASE=namex
 IAM_EMAIL=$(gcloud config get-value account)
+IAM_EMAIL="${IAM_EMAIL%.gserviceaccount.com}"
 PGPASSWORD="$(gcloud auth print-access-token)" psql \
   -h 127.0.0.1 \
   -p "$LOCAL_PORT" \
@@ -166,10 +163,10 @@ DATABASE_TCP_IAM_AUTH variable may need to be introduced for backward compatibil
               schema=app.config.get("DATABASE_SCHEMA", ""),
           )
       elif db_host:
-          db_config = PasswordDBConfig(
+          db_config = TCPDBConfig(
               database=app.config["DATABASE_NAME"],
               user=app.config["DATABASE_USERNAME"],
-              password=app.config["DATABASE_PASSWORD"],
+              connect_args={"password": app.config["DATABASE_PASSWORD"]},
               host=db_host,
               port=int(app.config["DATABASE_PORT"]),
           )

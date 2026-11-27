@@ -212,8 +212,12 @@ def getconn(db_config: DBConfig | TCPDBConfig) -> object:
 
 def _set_search_path(conn, schema: str) -> None:
     if schema:
-        _apply_search_path(conn, schema)
-        conn.commit()
+        try:
+            _apply_search_path(conn, schema)
+            conn.commit()
+        except Exception:
+            conn.close()
+            raise
 
 
 def _apply_search_path(conn, schema: str) -> None:

@@ -180,18 +180,44 @@ class TestGetconn:
         connection.commit.assert_called_once_with()
         assert result is connection
 
-    @patch("cloud_sql_connector.connector.pg8000.connect")
-    def test_getconn_closes_cursor_if_schema_setup_fails(self, mock_connect):
-        connection = mock_connect.return_value
+    @pytest.mark.parametrize("mode", ["tcp", "connector"])
+    @pytest.mark.parametrize("failure", ["execute", "commit"])
+    def test_getconn_closes_connection_if_schema_setup_fails(self, mode, failure):
+        connection = MagicMock()
         cursor = connection.cursor.return_value
-        cursor.execute.side_effect = RuntimeError("schema setup failed")
-        config = TCPDBConfig(database="test_db", user="test_user", schema="test_schema")
+        error = RuntimeError("schema setup failed")
+        if failure == "execute":
+            cursor.execute.side_effect = error
+        else:
+            connection.commit.side_effect = error
+        if mode == "tcp":
+            config = TCPDBConfig(
+                database="test_db", user="test_user", schema="test_schema"
+            )
+            target = "cloud_sql_connector.connector.pg8000.connect"
+        else:
+            config = DBConfig(
+                instance_name="project:region:instance",
+                database="test_db",
+                user="test_user",
+                ip_type="public",
+                schema="test_schema",
+            )
+            target = "cloud_sql_connector.connector._get_connector"
 
-        with pytest.raises(RuntimeError, match="schema setup failed"):
-            getconn(config)
+        with patch(target) as factory:
+            if mode == "tcp":
+                factory.return_value = connection
+            else:
+                factory.return_value.connect.return_value = connection
+            with pytest.raises(RuntimeError) as raised:
+                getconn(config)
 
+        assert raised.value is error
         cursor.close.assert_called_once_with()
-        connection.commit.assert_not_called()
+        connection.close.assert_called_once_with()
+        if failure == "execute":
+            connection.commit.assert_not_called()
 
     def test_tcp_engine_options_use_tcp_connection_factory(self):
         config = TCPDBConfig(database="test_db", user="test_user")
