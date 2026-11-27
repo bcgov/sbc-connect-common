@@ -182,8 +182,13 @@ class TestGetconn:
 
     @pytest.mark.parametrize("mode", ["tcp", "connector"])
     @pytest.mark.parametrize("failure", ["execute", "commit"])
-    def test_getconn_closes_connection_if_schema_setup_fails(self, mode, failure):
+    @pytest.mark.parametrize("close_fails", [False, True])
+    def test_getconn_closes_connection_if_schema_setup_fails(
+        self, mode, failure, close_fails, caplog
+    ):
         connection = MagicMock()
+        if close_fails:
+            connection.close.side_effect = OSError("connection cleanup failed")
         cursor = connection.cursor.return_value
         error = RuntimeError("schema setup failed")
         if failure == "execute":
@@ -216,6 +221,10 @@ class TestGetconn:
         assert raised.value is error
         cursor.close.assert_called_once_with()
         connection.close.assert_called_once_with()
+        if close_fails:
+            assert "Failed to close connection after schema initialization error" in (
+                caplog.text
+            )
         if failure == "execute":
             connection.commit.assert_not_called()
 

@@ -13,6 +13,7 @@
 # limitations under the License.
 """Cloud SQL connection utilities for the Notify API service."""
 
+import logging
 import threading
 import time
 from _thread import LockType
@@ -216,7 +217,12 @@ def _set_search_path(conn, schema: str) -> None:
             _apply_search_path(conn, schema)
             conn.commit()
         except Exception:
-            conn.close()
+            try:
+                conn.close()
+            except Exception:
+                logging.getLogger(__name__).exception(
+                    "Failed to close connection after schema initialization error"
+                )
             raise
 
 
