@@ -21,7 +21,8 @@ flowchart TB
         iap["Identity-Aware Proxy"]
 
         subgraph host["Shared VPC host project"]
-            vm["VM running Cloud SQL Auth Proxy<br/>VM service account: Cloud SQL Client only<br/>No database grants"]
+            vm["Proxy VM A<br/>Cloud SQL Client only; no database grants"]
+            vmB["Proxy VM B<br/>Cloud SQL Client only; no database grants"]
         end
 
         subgraph clientA["Service project A attached to Shared VPC"]
@@ -32,8 +33,9 @@ flowchart TB
         end
 
         iap -->|"SSH to VM: TCP 22"| vm
+        iap -->|"SSH to VM: TCP 22"| vmB
         vm -->|"Shared VPC private connectivity"| sqlA
-        vm -->|"Shared VPC private connectivity"| sqlB
+        vmB -->|"Shared VPC private connectivity"| sqlB
     end
 
     tunnel -->|"SSH over IAP"| iap
@@ -42,6 +44,9 @@ flowchart TB
 Arrows show the network path. Cloud SQL instances belong to the attached service
 projects; their private IP connectivity uses the host project's Shared VPC and
 private service access.
+
+Each proxy VM serves a single database target. Separate targets use separate
+VMs and tunnels; the setup below describes one such VM.
 
 The VM service account authorizes the proxy to establish connections, but does
 not grant the application database access. In this application-managed IAM
