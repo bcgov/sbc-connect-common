@@ -14,15 +14,37 @@
 """Unit tests for the cloud SQL connector module."""
 
 import sys
-from unittest.mock import MagicMock, Mock, call, patch
+import threading
+import time
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta, timezone
+from unittest.mock import MagicMock, Mock, patch
+
+import pytest
+from google.auth.credentials import Credentials
 
 from cloud_sql_connector.connector import (
     DBConfig,
+    TCPDBConfig,
     close_connector,
     getconn,
     setup_pg8000_close_event_listener,
     setup_search_path_event_listener,
 )
+
+
+class FakeIAMCredentials(Credentials):
+    def __init__(self):
+        super().__init__()
+        self.refresh_count = 0
+
+    def refresh(self, request):
+        time.sleep(0.01)
+        self.refresh_count += 1
+        self.token = f"token-{self.refresh_count}"
+        self.expiry = datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(
+            hours=1
+        )
 
 
 class TestDBConfig:
@@ -55,6 +77,27 @@ class TestDBConfig:
         )
 
         assert config.schema == ""
+
+    @pytest.mark.parametrize(
+        "config",
+        [
+            DBConfig(
+                instance_name="project:region:instance",
+                database="test_db",
+                user="test_user",
+                ip_type="public",
+                schema="",
+                connect_args={"password": "test_password"},
+            ),
+            TCPDBConfig(
+                database="test_db",
+                user="test_user",
+                connect_args={"password": "test_password"},
+            ),
+        ],
+    )
+    def test_config_repr_does_not_expose_connect_args(self, config):
+        assert "test_password" not in repr(config)
 
 
 class TestGetconn:
@@ -90,6 +133,224 @@ class TestGetconn:
         )
         assert result == mock_connection
 
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    def test_getconn_tcp(self, mock_connect):
+        connection = Mock()
+        mock_connect.return_value = connection
+        config = TCPDBConfig(
+            database="test_db",
+            user="test_user",
+            host="localhost",
+            port=5433,
+            connect_args={"password": "test_password"},
+        )
+
+        result = getconn(config)
+
+        mock_connect.assert_called_once_with(
+            password="test_password",
+            host="localhost",
+            port=5433,
+            database="test_db",
+            user="test_user",
+        )
+        assert result is connection
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    def test_getconn_tcp_sets_schema(self, mock_connect):
+        connection = Mock()
+        mock_cursor = Mock()
+        connection.cursor.return_value = mock_cursor
+        mock_connect.return_value = connection
+        config = TCPDBConfig(
+            database="test_db",
+            user="test_user",
+            schema='Mixed"Name',
+        )
+
+        result = getconn(config)
+
+        mock_connect.assert_called_once_with(
+            host="127.0.0.1", port=5432, database="test_db", user="test_user"
+        )
+        mock_cursor.execute.assert_called_once_with(
+            'SET search_path TO "Mixed""Name", public'
+        )
+        mock_cursor.close.assert_called_once()
+        connection.commit.assert_called_once_with()
+        assert result is connection
+
+    @pytest.mark.parametrize("mode", ["tcp", "connector"])
+    @pytest.mark.parametrize("failure", ["execute", "commit"])
+    @pytest.mark.parametrize("close_fails", [False, True])
+    def test_getconn_closes_connection_if_schema_setup_fails(
+        self, mode, failure, close_fails, caplog
+    ):
+        connection = MagicMock()
+        if close_fails:
+            connection.close.side_effect = OSError("connection cleanup failed")
+        cursor = connection.cursor.return_value
+        error = RuntimeError("schema setup failed")
+        if failure == "execute":
+            cursor.execute.side_effect = error
+        else:
+            connection.commit.side_effect = error
+        if mode == "tcp":
+            config = TCPDBConfig(
+                database="test_db", user="test_user", schema="test_schema"
+            )
+            target = "cloud_sql_connector.connector.pg8000.connect"
+        else:
+            config = DBConfig(
+                instance_name="project:region:instance",
+                database="test_db",
+                user="test_user",
+                ip_type="public",
+                schema="test_schema",
+            )
+            target = "cloud_sql_connector.connector._get_connector"
+
+        with patch(target) as factory:
+            if mode == "tcp":
+                factory.return_value = connection
+            else:
+                factory.return_value.connect.return_value = connection
+            with pytest.raises(RuntimeError) as raised:
+                getconn(config)
+
+        assert raised.value is error
+        cursor.close.assert_called_once_with()
+        connection.close.assert_called_once_with()
+        if close_fails:
+            assert "Failed to close connection after schema initialization error" in (
+                caplog.text
+            )
+        if failure == "execute":
+            connection.commit.assert_not_called()
+
+    def test_tcp_engine_options_use_tcp_connection_factory(self):
+        config = TCPDBConfig(database="test_db", user="test_user")
+
+        options = config.get_engine_options()
+
+        assert options["pool_size"] == config.pool_size
+        assert options["connect_args"] == config.connect_args
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.default")
+    def test_tcp_iam_reuses_and_refreshes_token(self, mock_default, mock_connect):
+        credentials = FakeIAMCredentials()
+        mock_default.return_value = (credentials, None)
+        config = TCPDBConfig(database="test_db", user="test_user", enable_iam_auth=True)
+
+        getconn(config)
+        config.get_engine_options()["creator"]()
+        credentials.expiry = datetime.now(timezone.utc).replace(
+            tzinfo=None
+        ) - timedelta(seconds=1)
+        getconn(config)
+
+        mock_default.assert_called_once_with(
+            scopes=["https://www.googleapis.com/auth/sqlservice.login"]
+        )
+        assert [c.kwargs["password"] for c in mock_connect.call_args_list] == [
+            "token-1",
+            "token-1",
+            "token-2",
+        ]
+        assert "password" not in config.connect_args
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.load_credentials_from_file")
+    def test_tcp_iam_explicit_credentials_file(self, mock_load, mock_connect):
+        mock_load.return_value = (FakeIAMCredentials(), None)
+        config = TCPDBConfig(
+            database="test_db",
+            user="test_user",
+            enable_iam_auth=True,
+            credentials_file="/path/to/wif-config.json",
+        )
+
+        getconn(config)
+
+        mock_load.assert_called_once_with(
+            "/path/to/wif-config.json",
+            scopes=["https://www.googleapis.com/auth/sqlservice.login"],
+        )
+        assert mock_connect.call_args.kwargs["password"] == "token-1"
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.default")
+    def test_tcp_iam_refresh_is_synchronized(self, mock_default, mock_connect):
+        credentials = FakeIAMCredentials()
+        mock_default.return_value = (credentials, None)
+        config = TCPDBConfig(database="test_db", user="test_user", enable_iam_auth=True)
+        barrier = threading.Barrier(8)
+
+        def connect(_):
+            barrier.wait(timeout=5)
+            return getconn(config)
+
+        with ThreadPoolExecutor(max_workers=8) as executor:
+            list(executor.map(connect, range(8)))
+
+            assert credentials.refresh_count == 1
+            assert all(
+                c.kwargs["password"] == "token-1" for c in mock_connect.call_args_list
+            )
+            mock_connect.reset_mock()
+            credentials.expiry = datetime.now(timezone.utc).replace(
+                tzinfo=None
+            ) - timedelta(seconds=1)
+
+            list(executor.map(connect, range(8)))
+
+        mock_default.assert_called_once()
+        assert credentials.refresh_count == 2
+        assert mock_connect.call_count == 8
+        assert all(
+            c.kwargs["password"] == "token-2" for c in mock_connect.call_args_list
+        )
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.default")
+    def test_tcp_iam_refresh_failure_is_propagated(self, mock_default, mock_connect):
+        credentials = FakeIAMCredentials()
+        credentials.refresh = Mock(side_effect=RuntimeError("refresh failed"))
+        mock_default.return_value = (credentials, None)
+        config = TCPDBConfig(database="test_db", user="test_user", enable_iam_auth=True)
+
+        with pytest.raises(RuntimeError, match="refresh failed"):
+            getconn(config)
+        mock_connect.assert_not_called()
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.default")
+    def test_tcp_iam_missing_token_fails(self, mock_default, mock_connect):
+        credentials = FakeIAMCredentials()
+        credentials.refresh = Mock()
+        mock_default.return_value = (credentials, None)
+        config = TCPDBConfig(database="test_db", user="test_user", enable_iam_auth=True)
+
+        with pytest.raises(RuntimeError, match="did not provide an access token"):
+            getconn(config)
+        mock_connect.assert_not_called()
+
+    @patch("cloud_sql_connector.connector.pg8000.connect")
+    @patch("cloud_sql_connector.connector.google.auth.default")
+    def test_tcp_iam_rejects_explicit_password(self, mock_default, mock_connect):
+        config = TCPDBConfig(
+            database="test_db",
+            user="test_user",
+            enable_iam_auth=True,
+            connect_args={"password": "test_password"},
+        )
+
+        with pytest.raises(ValueError, match="must not contain password"):
+            getconn(config)
+        mock_default.assert_not_called()
+        mock_connect.assert_not_called()
+
     @patch("cloud_sql_connector.connector._connector")
     def test_getconn_with_schema(self, mock_connector):
         """Test getconn function with schema."""
@@ -123,12 +384,11 @@ class TestGetconn:
 
         # Check cursor calls for schema setup
         mock_connection.cursor.assert_called()
-        expected_calls = [
-            call("SET search_path TO test_schema,public"),
-            call("SET LOCAL search_path TO test_schema, public;"),
-        ]
-        mock_cursor.execute.assert_has_calls(expected_calls)
+        mock_cursor.execute.assert_called_once_with(
+            'SET search_path TO "test_schema", public'
+        )
         mock_cursor.close.assert_called_once()
+        mock_connection.commit.assert_called_once_with()
 
         assert result == mock_connection
 
@@ -172,7 +432,7 @@ class TestSetupSearchPathEventListener:
     def test_event_listener_callback(self, mock_event):
         """Test the event listener callback function."""
         mock_engine = Mock()
-        schema = "test_schema"
+        schema = 'Mixed"Name'
 
         # Capture the callback function
         callback_function = None
@@ -206,9 +466,15 @@ class TestSetupSearchPathEventListener:
         # Verify cursor operations
         mock_dbapi_connection.cursor.assert_called_once()
         mock_cursor.execute.assert_called_once_with(
-            "SET search_path TO test_schema,public"
+            'SET search_path TO "Mixed""Name", public'
         )
         mock_cursor.close.assert_called_once()
+        mock_dbapi_connection.commit.assert_not_called()
+
+    @patch("cloud_sql_connector.connector.event")
+    def test_empty_schema_does_not_register_listener(self, mock_event):
+        setup_search_path_event_listener(Mock(), "")
+        mock_event.listens_for.assert_not_called()
 
 
 class TestSetupPg8000CloseEventListener:

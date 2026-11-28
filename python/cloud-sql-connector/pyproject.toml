@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cloud-sql-connector"
-version = "0.2.3"
+version = "0.2.4"
 description = "Cloud SQL connection utilities for database connectivity with authentication and schema management"
 authors = ["Andriy Bolyachevets <andriy.Bolyachevets@gov.bc.ca>"]
 readme = "README.md"
@@ -11,6 +11,7 @@ python = "^3.12"
 cloud-sql-python-connector = "^1.16.0"
 sqlalchemy = "^2.0.0"
 pg8000 = "^1.30.0"
+google-auth = {version = ">=2.28.0,<3.0.0", extras = ["requests"]}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
