@@ -21,21 +21,17 @@ flowchart TB
         iap["Identity-Aware Proxy"]
 
         subgraph host["Shared VPC host project"]
-            vm["VM A: single Cloud SQL Auth Proxy<br/>VM SA: Cloud SQL Client only; no database grants"]
-            vmB["VM B: single Cloud SQL Auth Proxy<br/>VM SA: Cloud SQL Client only; no database grants"]
+            subgraph vm["Proxy VM<br/>VM SA: Cloud SQL Client only; no database grants"]
+                proxy["Single Cloud SQL Auth Proxy"]
+            end
         end
 
-        subgraph clientA["Service project A attached to Shared VPC"]
-            sqlA["Cloud SQL instance A<br/>Private IP"]
-        end
-        subgraph clientB["Service project B attached to Shared VPC"]
-            sqlB["Cloud SQL instance B<br/>Private IP"]
+        subgraph client["Service project attached to Shared VPC"]
+            sql["Cloud SQL instance<br/>Private IP"]
         end
 
-        iap -->|"SSH to VM: TCP 22"| vm
-        iap -->|"SSH to VM: TCP 22"| vmB
-        vm -->|"Shared VPC private connectivity"| sqlA
-        vmB -->|"Shared VPC private connectivity"| sqlB
+        iap -->|"SSH to VM: TCP 22<br/>Forward to localhost:5432"| proxy
+        proxy -->|"Shared VPC private connectivity"| sql
     end
 
     tunnel -->|"SSH over IAP"| iap
